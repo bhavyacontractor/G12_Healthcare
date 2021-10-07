@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>Vaccine Details</title>
+  </head>
+  <body>
+    <h1>{{ hospName }}</h1> <br><br><br>
+
+     {% if hospVaccineDetails|length == 0 %}
+
+     <h2>Your Hospital Does Not Provide vaccination services...Please Click on Add Hospital to enroll the hospital</h2>
+
+     <form action="/addVaccine" method="POST">
+        <button class="btn btn-primary" id="hospVaccAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
+    </form>
+
+
+     {% else %}
+
+     <form action="/updateVaccine" method="POST">
+
+     <table class="coursesTable" >
+      <thead class="thead">
+          <tr>
+              <th>Vaccine Name</th>
+              <th>Doses Available</th>
+          </tr>
+      </thead>
+      <tbody class="tbody">
+          <tr>
+              <td>CoviShield</td>
+              <td><input placeholder="{{ hospVaccineDetails[0][1] }}" type="number" id="v1" name="v1" style="background-color: #FFAA4C;"></td>
+          </tr>
+          <tr>
+              <td>Covaxin</td>
+              <td><input placeholder="{{ hospVaccineDetails[0][2] }}" type="number" id="v2" name="v2" style="background-color: #FFAA4C;"></td>
+          </tr>
+          <tr>
+              <td>Sputnik</td>
+              <td><input placeholder="{{ hospVaccineDetails[0][3] }}" type="number" id="v3" name="v3" style="background-color: #FFAA4C;"></td>
+          </tr>
+
+      </tbody>
+  </table>
+
+  <button class="btn btn-primary" id="hospVaccUpdBtn" style="margin-left: 640px; margin-top: 40px;">Make Changes</button>
+
+  </form>
+
+     {% endif %}
+
+     <div class="buttonContainer">
+        <div class="innerDiv">
+          <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+  </body>
+  <script src="{{url_for('static', filename='js/update_vaccine.js')}}"></script>
+</html>

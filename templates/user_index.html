@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<form method="post" action="{{ url_for('update') }}">
+    <input type="text" name="add" placeholder="Address">
+    <input type="number" name="phno" placeholder="Phone Number">
+    <input type="date" name="dob" placeholder="Date of Birth">
+    <input type="submit" value="Update">
+</form>
+<br><br>
+Userid: {{ session.UserId }}<br>
+Name: {{ session.Name }}<br>
+Address: {{ session.Address }}<br>
+Phone Number: {{ session.Phone }}<br>
+Date of Birth: {{ session.DOB }}<br>
+<form action="{{ url_for('logout') }}">
+    <input type="submit" value="Logout">
+</form>
+
+</body>
+</html>

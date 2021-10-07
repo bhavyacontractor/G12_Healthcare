@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+
+    <title> Hospital Home Page</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+     <!-- Populate the dropdown list with the 'features' list obtained from jinja -->
+      <h1>{{ hospName }}</h1> <br><br><br>
+     <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Update Facility Details
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/updateVaccine">COVID-19 Vaccination</a></li>
+            <li><a class="dropdown-item" href="/updateOxygen">COVID-19 Oxygen Status</a></li>
+            <li><a class="dropdown-item" href="/updateSurgery">Surgery and Emergency</a></li>
+            <li><a class="dropdown-item" href="/update_beds">COVID-19 Beds</a></li>
+            <li><a class="dropdown-item" href="update_organ_donation.html">Organ Donation</a></li>
+            <li><a class="dropdown-item" href="update_blood_don.html">Blood Donation</a></li>
+            <li><a class="dropdown-item" href="update_doctors.html">Doctor's Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="buttonContainer">
+        <div class="innerDiv">
+          <a href="/" type="button" class="logOutBtn">Log Out</a>
+        </div>
+      </div>
+
+    </body>
+</html>
