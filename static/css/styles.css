@@ -1,0 +1,109 @@
+body {
+  background-color: #64c9cf;
+}
+
+.buttonContainer {
+    margin-top: 50px;
+  height: 200px;
+  position: relative;
+}
+
+.innerDiv {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#regBtnHome #logBtnHome
+{
+    height: 20px;
+    width: 20px;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 20%;
+    margin-bottom: 20px;
+  }
+
+.bthIITI
+{
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+
+.coursesTable {
+  margin-top: 100px;
+  border-collapse: collapse;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
+  margin-right: auto;
+  
+  text-align: left;
+  border-spacing: 0 15px;
+}
+
+.coursesTable th , .coursesTable td
+{
+  padding: 12px 15px;
+}
+
+.thead
+{
+  background-color: #F5FDB0;
+  font-weight: bold;
+}
+
+.tbody
+{
+  background-color: #FFAA4C;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+height: 200px;
+position: relative;
+}
+
+.logOutBtn , .hospHomeBtn
+{
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.selectionContainer
+{
+  position: relative;
+  height: 150px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.selectSurgery
+{
+  position: absolute;
+  left: 250px;
+  font-size: large;
+}
+
