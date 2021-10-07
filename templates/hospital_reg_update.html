@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/styles.css') }}"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+
+    
+
+    <title>Complete Hospital Registration</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <div class="container my-3">
+        <h1> Please Complete/Update the Hospital Registration </h1><br>
+        <h2>Hospital ID : {{ hospDetails[0][0]}}</h2> <br>
+        <form action="/hospRegisterUpdate" method="POST">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Update Hospital Name</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="text" class="form-control" id="hospName" rows="1" name="hospName" placeholder="{{ hospDetails[0][1]}}"/>
+                </div>
+                
+                <h5 class="card-title">Update/Enter Hospital Email-ID</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="email" class="form-control" id="hospEmail" name="hospEmail" placeholder="{{ hospDetails[0][2]}}"/>
+                </div>
+
+                <h5 class="card-title">Update/Enter Hospital Phone Number</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="number" class="form-control" id="hospPhone" name="hospPhone" placeholder="{{ hospDetails[0][3]}}"/>
+                </div>
+
+                <h5 class="card-title">Update/Enter Hospital Address</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                  <textarea class="form-control" id="hospAddress" rows="3" name="hospAddress" placeholder="{{ hospDetails[0][4]}}"></textarea>
+                </div>
+                
+                <button class="btn btn-primary" id="hospRegUpdateBtn">Update Hospital Details</button>
+            </div>
+        </div>
+      </form>
+      <br>
+      <div class="buttonContainer">
+        <div class="innerDiv">
+          <a href="/hospAfterLogin" type="button" class="hospHomeBtn">Go to Home</a>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

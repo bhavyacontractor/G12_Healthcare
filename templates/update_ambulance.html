@@ -5,9 +5,19 @@
     <title>Ambulance</title>
 </head>
 <body>
-<form method="post" action="/update_ambulance">
-  <input type="number" placeholder="Number of ambulances available" name="amb" id="amb">
-  <input type="submit" value="Update">
-</form>
+  <h1>{{ hospName }}</h1> <br><br><br>
+  <form method="post" action="/updateAmbulance">
+    <input type="number" placeholder="{{hospAmbulanceDetails[0][1]}}" name="amb" id="amb">
+    <label for="amb">Number of Ambulance</label>
+    <input type="submit" value="Update">
+  </form>
+
+  <br><br>
+  <div class="buttonContainer">
+    <div class="innerDiv">
+      <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
+    </div>
+</div>
+
 </body>
 </html>
