@@ -8,49 +8,42 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
-    <title>Vaccine Details</title>
+    <title>Oxygen Details</title>
   </head>
   <body>
     <h1>{{ hospName }}</h1> <br><br><br>
 
-     {% if hospVaccineDetails|length == 0 %}
+     {% if hospOxygenDetails|length == 0 %}
 
-     <h2>Your Hospital Does Not Provide vaccination services...Please Click on Add Hospital to enroll the hospital</h2>
+     <h2>Your Hospital Does Not Provide Oxygen services...Please Click on Add Hospital to enroll the hospital</h2>
 
-     <form action="/addVaccine" method="POST">
-        <button class="btn btn-primary" id="hospVaccAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
+     <form action="/addOxygen" method="POST">
+        <button class="btn btn-primary" id="hospOxyAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
     </form>
 
        
      {% else %}
 
-     <form action="/updateVaccine" method="POST">
+     <form action="/updateOxygen" method="POST">
 
      <table class="coursesTable" >
       <thead class="thead">
           <tr>
-              <th>Vaccine Name</th>
-              <th>Doses Available</th>
+              <th>Litres Available</th>
+              <th>Hourly Supply (Litres)</th>
+              <th>Price Per Litre</th>
           </tr>
       </thead>
       <tbody class="tbody">
           <tr>
-              <td>CoviShield</td>
-              <td><input placeholder="{{ hospVaccineDetails[0][1] }}" type="number" id="v1" name="v1" style="background-color: #FFAA4C;"></td>
+            <td><input placeholder="{{ hospOxygenDetails[0][1] }}" type="number" id="lit_avail" name="lit_avail" style="background-color: #FFAA4C;"></td>
+            <td><input placeholder="{{ hospOxygenDetails[0][2] }}" type="number" id="hourly_suppl" name="hourly_suppl" style="background-color: #FFAA4C;"></td>
+            <td><input placeholder="{{ hospOxygenDetails[0][3] }}" type="number" id="price_pl" name="price_pl" style="background-color: #FFAA4C;"></td>
           </tr>
-          <tr>
-              <td>Covaxin</td>
-              <td><input placeholder="{{ hospVaccineDetails[0][2] }}" type="number" id="v2" name="v2" style="background-color: #FFAA4C;"></td>
-          </tr>
-          <tr>
-              <td>Sputnik</td>
-              <td><input placeholder="{{ hospVaccineDetails[0][3] }}" type="number" id="v3" name="v3" style="background-color: #FFAA4C;"></td>
-          </tr>
-          
-      </tbody>
+       </tbody>
   </table>
 
-  <button class="btn btn-primary" id="hospVaccUpdBtn" style="margin-left: 640px; margin-top: 40px;">Make Changes</button>
+  <button class="btn btn-primary" id="hospOxyUpdBtn" style="margin-left: 640px; margin-top: 40px;">Make Changes</button>
 
   </form>
        
@@ -61,6 +54,7 @@
           <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
         </div>
     </div>
+
     
 
     <!-- Optional JavaScript; choose one of the two! -->

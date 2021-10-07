@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surgery Details</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/styles.css') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+
+    <h1>{{ hospName }}</h1>
+
+    {% if hospSurgeryDetails|length == 0 %}
+
+     <h2>Your Hospital Does Not Provide Surgery services...Please Click on Add Hospital to enroll the hospital</h2>
+
+     <form action="/addSurgery" method="POST">
+        <button class="btn btn-primary" id="hospSurgAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
+    </form>
+
+    {% else %}
+
+    <form action="/updateSurgery" method="POST">
+
+    <div class="selectionContainer">
+    <div class="selectSurgery">
+      <h4>Select the Surgeries Available at this Hospital</h4> <br>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          name="heart"
+          id="heart"
+          value="heart"
+          {{ 'checked="checked"' if hospSurgeryDetails[0][1] }}
+        />
+        <label class="form-check-label" for="heart"> Heart Surgery </label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          name="joint"
+          id="joint"
+          value="joint"
+          {{ 'checked="checked"' if hospSurgeryDetails[0][2] }}
+        />
+        <label class="form-check-label" for="joint"> Joint Surgery </label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          name="abdominal"
+          id="abdominal"
+          value="abdominal"
+          {{ 'checked="checked"' if hospSurgeryDetails[0][3] }}
+        />
+        <label class="form-check-label" for="abdominal">
+          Abdominal Surgery
+        </label>
+      </div>
+    </div>
+    </div>
+    <button class="btn btn-primary" id="hospSurgeryUpdBtn" style="margin-left: 640px; margin-top: 40px;">Make Changes</button>
+  </form>
+
+  {% endif %}
+
+    <div class="buttonContainer">
+      <div class="innerDiv">
+        <a href="/hospAfterLogin" type="button" class="hospHomeBtn">Go to Home</a>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -14,8 +14,10 @@ Session(app)
 
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-myconn = mysql.connector.connect(host="localhost", user="root", passwd="@Bhakauhet92", database="healthcare",
-                                 buffered=True)
+# myconn = mysql.connector.connect(host="localhost", user="root", passwd="@Bhakauhet92", database="healthcare",
+#                                  buffered=True)
+
+myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200001044mysql",database="healthcare_portal", buffered=True)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -26,24 +28,23 @@ def home_page():
 @app.route('/hospRegister', methods=['GET', 'POST'])
 def register_page():
     if request.method == 'POST':
-        hospDetails = request.form
-        hospName = hospDetails['hospName']
-        hospEmail = hospDetails['hospEmail']
-        hospPhone = hospDetails['hospPhone']
-        hospAddress = hospDetails['hospAddress']
-        hosp_ID = hospDetails['hospID']
-        hospPassword = hospDetails['hospPassword']
-        cur = myconn.cursor()
-
-        cur.execute(
-            "INSERT INTO hospital(hosp_ID,hospName,hospEmail,hospPhone,hospAddress,hospPassword) VALUES(%s,%s,%s,%s,%s,%s)",
+        try:
+            hospDetails = request.form
+            hospName = hospDetails['hospName']
+            hospEmail = hospDetails['hospEmail']
+            hospPhone = hospDetails['hospPhone']
+            hospAddress = hospDetails['hospAddress']
+            hosp_ID = hospDetails['hospID']
+            hospPassword = hospDetails['hospPassword']
+            cur = myconn.cursor()
+            cur.execute("INSERT INTO hospital(hosp_ID,hospName,hospEmail,hospPhone,hospAddress,hospPassword) VALUES(%s,%s,%s,%s,%s,%s)",
             (int(hosp_ID), hospName, hospEmail, int(hospPhone), hospAddress, hospPassword))
-        myconn.commit()
-        cur.close()
-        return redirect('/hospRegister')
-        # except:
-        #     print("ERROR!!!!")
-        #     return render_template('hospital_reg.html')
+            myconn.commit()
+            cur.close()
+            return redirect('/hospRegister')
+        except:
+            print("ERROR!!!!")
+            return render_template('hospital_reg.html')
 
     return render_template('hospital_reg.html')
 
@@ -243,53 +244,136 @@ def add_surgery_details():
     return redirect('/updateSurgery')
 
 
-@app.route('/update_beds', methods=['GET', 'POST'])
+@app.route('/updateBeds', methods=['GET', 'POST'])
 def update_beds():
     if request.method == 'POST':
         nbeds = request.form['bed']
         hosp_ID = session["hosp_ID"]
         cur = myconn.cursor()
-        sql_query = "SELECT * FROM hospital WHERE hosp_ID ='%s'" % (int(hosp_ID))
-        cur.execute(sql_query)
-        acc = cur.fetchone()
-        if acc:
-            cur = myconn.cursor()
-            cur.execute('UPDATE beds SET BedsQuantity=%s WHERE hosp_id=%s', (nbeds, hosp_ID))
-            myconn.commit()
-            cur.close()
+        cur.execute('UPDATE BedsDetails SET BedsQuantity=%s WHERE hosp_id=%s', (nbeds, hosp_ID))
+        myconn.commit()
+        cur.close()
 
-    return render_template('update_beds.html')
+    hosp_ID = session["hosp_ID"]
+    sql_query = "SELECT * FROM BedsDetails WHERE hosp_ID ='%s'" % (int(hosp_ID))
+    cur = myconn.cursor()
+    cur.execute(sql_query)
+    hospBedsDetails = cur.fetchall()
+    return render_template('update_beds.html', hospBedsDetails=hospBedsDetails,hospName=session["hospName"])  # Pass all bed details
 
+@app.route('/addBeds', methods=['GET', 'POST'])
+def add_bed_details():
+    if request.method == 'POST':
+        cur = myconn.cursor()
+        hosp_ID = session["hosp_ID"]
+        cur.execute("INSERT INTO BedsDetails(hosp_ID,BedsQuantity) VALUES(%s,%s)",(int(hosp_ID), int(0)))
+        myconn.commit()
+        cur.close()
+    return redirect('/updateBeds')
 
-@app.route('/update_blood', methods=['GET', 'POST'])
+#  cur.execute(
+#                 'UPDATE blood SET AP_Quantity=%s, AN_Quantity=%s, BP_Quantity=%s, BN_Quantity=%s, OP_Quantity=%s, ON_Quantity=%s, ABP_Quantity=%s, ABN_Quantity=%s WHERE hosp_id=%s',
+#                 (ap, an, bp, bn, op, on, abp, abn, hid))
+#             myconn.commit()
+
+@app.route('/updateBlood', methods=['GET', 'POST'])
 def update_blood():
     if request.method == 'POST':
-        ap = request.form['ap']
-        an = request.form['an']
-        bp = request.form['bp']
-        bn = request.form['bn']
-        abp = request.form['abp']
-        abn = request.form['abn']
-        op = request.form['op']
-        on = request.form['on']
         hosp_ID = session["hosp_ID"]
-        cur = myconn.cursor()
-        sql_query = "SELECT * FROM hospital WHERE hosp_ID ='%s'" % (int(hosp_ID))
-        cur.execute(sql_query)
-        acc = cur.fetchone()
-        if acc:
-            hid = acc[0]
+        x = 0
+        try:
             cur = myconn.cursor()
-            cur.execute(
-                'UPDATE blood SET AP_Quantity=%s, AN_Quantity=%s, BP_Quantity=%s, BN_Quantity=%s, OP_Quantity=%s, ON_Quantity=%s, ABP_Quantity=%s, ABN_Quantity=%s WHERE hosp_id=%s',
-                (ap, an, bp, bn, op, on, abp, abn, hid))
+            ap = request.form['ap']
+            cur.execute('UPDATE BloodDetails SET AP_Quantity=%s WHERE hosp_id=%s',(ap,hosp_ID))
             myconn.commit()
             cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:
+            cur = myconn.cursor()
+            an = request.form['an']
+            cur.execute('UPDATE BloodDetails SET AN_Quantity=%s WHERE hosp_id=%s',(an,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:
+            cur = myconn.cursor()
+            bp = request.form['bp']
+            cur.execute('UPDATE BloodDetails SET BP_Quantity=%s WHERE hosp_id=%s',(bp,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:
+            cur = myconn.cursor()
+            bn = request.form['bn']
+            cur.execute('UPDATE BloodDetails SET BN_Quantity=%s WHERE hosp_id=%s',(bn,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:    
+            cur = myconn.cursor()
+            abp = request.form['abp']
+            cur.execute('UPDATE BloodDetails SET ABP_Quantity=%s WHERE hosp_id=%s',(abp,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:
+            cur = myconn.cursor()
+            abn = request.form['abn']
+            cur.execute('UPDATE BloodDetails SET ABN_Quantity=%s WHERE hosp_id=%s',(abn,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:
+            cur = myconn.cursor()
+            op = request.form['op']
+            cur.execute('UPDATE BloodDetails SET OP_Quantity=%s WHERE hosp_id=%s',(op,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        try:
+            cur = myconn.cursor()
+            on = request.form['on']
+            cur.execute('UPDATE BloodDetails SET ON_Quantity=%s WHERE hosp_id=%s',(on,hosp_ID))
+            myconn.commit()
+            cur.close()
+        except Exception as e:
+            print(e)
+            x = 1
+        cur.close()
 
-    return render_template('update_blood.html')
+    hosp_ID = session["hosp_ID"]
+    sql_query = "SELECT * FROM BloodDetails WHERE hosp_ID ='%s'" % (int(hosp_ID))
+    cur = myconn.cursor()
+    cur.execute(sql_query)
+    hospBloodDetails = cur.fetchall()
+    return render_template('update_blood.html', hospBloodDetails=hospBloodDetails,hospName=session["hospName"])  # Pass all bed details
 
+@app.route('/addBlood', methods=['GET', 'POST'])
+def add_blood_details():
+    if request.method == 'POST':
+        cur = myconn.cursor()
+        hosp_ID = session["hosp_ID"]
+        cur.execute('INSERT INTO  BloodDetails(hosp_id,AP_Quantity,AN_Quantity,BP_Quantity,BN_Quantity,OP_Quantity,ON_Quantity,ABP_Quantity,ABN_Quantity) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                (int(hosp_ID), int(0),int(0),int(0),int(0),int(0),int(0),int(0),int(0)))
+        myconn.commit()
+        cur.close()
+        return redirect('/updateBlood')
 
-@app.route('/update_ambulance', methods=['GET', 'POST'])
+@app.route('/updateAmbulance', methods=['GET', 'POST'])
 def update_ambulance():
     if request.method == 'POST':
         namb = request.form['amb']

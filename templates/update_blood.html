@@ -6,17 +6,54 @@
 </head>
 <body>
 
-<form method="post" action="/update_blood">
-    <input name="ap" id="ap" placeholder="A+" type="number">
-    <input name="an" id="an" placeholder="A-" type="number">
-    <input name="bp" id="bp" placeholder="B+" type="number">
-    <input name="bn" id="bn" placeholder="B-" type="number">
-    <input name="abp" id="abp" placeholder="AB+" type="number">
-    <input name="abn" id="abn" placeholder="AB-" type="number">
-    <input name="op" id="op" placeholder="O+" type="number">
-    <input name="on" id="on" placeholder="O-" type="number">
-    <input type="submit" value="Update">
-</form>
+    <h1>{{ hospName }}</h1> <br><br><br>
+
+    {% if hospBloodDetails|length == 0 %}
+
+    <h2>Your Hospital Does Not Provide Blood Donation Services...Please Click on Add Hospital to enroll the hospital</h2>
+
+    <form action="/addBlood" method="POST">
+    <button class="btn btn-primary" id="hospVaccAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
+    </form>
+
+
+    {% else %}
+
+    <form method="post" action="/updateBlood">
+        <input name="ap" id="ap" placeholder="A+ Quantity: {{ hospBloodDetails[0][1]}}" type="number"><br>
+        <!-- <label for="ap">A+</label> <br> -->
+
+        <input name="an" id="an" placeholder="A- Quantity: {{ hospBloodDetails[0][2]}}" type="number"><br>
+        <!-- <label for="an">A-</label> <br> -->
+
+        <input name="bp" id="bp" placeholder="B+ Quantity: {{ hospBloodDetails[0][3]}}" type="number"><br>
+        <!-- <label for="bp">B+</label> <br> -->
+
+        <input name="bn" id="bn" placeholder="B- Quantity: {{ hospBloodDetails[0][4]}}" type="number"><br>
+        <!-- <label for="bn">B-</label> <br> -->
+
+        <input name="op" id="op" placeholder="O+ Quantity: {{ hospBloodDetails[0][5]}}" type="number"><br>
+        <!-- <label for="op">O+</label> <br> -->
+
+        <input name="on" id="on" placeholder="O- Quantity: {{ hospBloodDetails[0][6]}}" type="number"><br>
+        <!-- <label for="on">O-</label> <br> -->
+
+        <input name="abp" id="abp" placeholder="AB+ Quantity: {{ hospBloodDetails[0][7]}}" type="number"><br>
+        <!-- <label for="abp">AB+</label> <br> -->
+
+        <input name="abn" id="abn" placeholder="AB- Quantity: {{ hospBloodDetails[0][8]}}" type="number"><br>
+        <!-- <label for="abn">AB-</label> <br> -->
+
+        <input type="submit" value="Update">
+    </form>
+
+    {% endif %}
+
+     <div class="buttonContainer">
+        <div class="innerDiv">
+          <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
+        </div>
+    </div>
 
 </body>
 </html>

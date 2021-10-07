@@ -7,10 +7,30 @@
     <title>Beds</title>
 </head>
 <body>
-    Beds Status
-<form method="post" action="/update_beds">
-  <input type="number" placeholder="Number of beds" name="bed" id="bed">
+  <h1>{{ hospName }}</h1> <br>
+
+  {% if hospBedsDetails|length == 0 %}
+
+  <h2>Your Hospital Does Not Provide Bed Services...Please Click on Add Hospital to enroll the hospital</h2>
+
+  <form action="/addBeds" method="POST">
+     <button class="btn btn-primary" id="hospBedsAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
+ </form>
+
+ {% else %}
+  <h2>Beds Status</h2> <br>
+
+  <form method="post" action="/updateBeds">
+  <input type="number" placeholder="{{ hospBedsDetails[0][1] }}" name="bed" id="bed">
   <input type="submit" value="Update">
+  {% endif %}
+
+  <div class="buttonContainer">
+    <div class="innerDiv">
+      <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
+    </div>
+</div>
+
 </form>
 </body>
 </html>
