@@ -4,6 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}">
 
     <!-- Bootstrap CSS -->
     <link
@@ -17,6 +18,37 @@
   </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    {% if error_code==0 %}
+      <div class="message"></div>
+    
+    {% elif error_code==1 %}
+    <div class="message">
+      <div class="message">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Message:</strong> Hospital Added Successfully! Make sure to complete your registration after logging in!
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    {% elif error_code==2%}
+    <div class="message">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> Invalid Details! Please Check Details Carefully 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+
+    {% elif error_code==3%}
+    <div class="message">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> Passwords Do Not Match! 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+
+    {% endif %}
 
     <div class="container my-3">
         <h1>Enter Hospital Details for Registration </h1>
@@ -49,6 +81,12 @@
         </div>
       </form>
     </div>
+    
+    <div class="buttonContainer">
+      <div class="innerDiv">
+        <a href='/' type="button" class="hospRegHomeBtn">Go To Home Page</a>
+      </div>
+  </div>
 
   </body>
 </html>

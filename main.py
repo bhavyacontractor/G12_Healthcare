@@ -27,21 +27,30 @@ def home_page():
 
 @app.route('/hospRegisterInitial',methods=['GET','POST'])
 def register_page_init():
+    error_code = 0
     if request.method=='POST':
         hospDetails = request.form
         hospName = hospDetails['hospName']
         hosp_ID = hospDetails['hospID']
         hospPassword = hospDetails['hospPassword']
+        hospPasswordRepeat = hospDetails['hospPasswordRepeat']
+
+        if hospPassword!=hospPasswordRepeat:
+            error_code=3
+            return render_template('hospital_reg_init.html',error_code=error_code)
+
         cur = myconn.cursor()
         try:
             cur.execute("INSERT INTO Hospital(hosp_ID,hospName,hospPassword) VALUES(%s,%s,%s)",(int(hosp_ID),hospName,hospPassword))
             myconn.commit()
             cur.close()
-            return redirect('/')
+            error_code=1
+            return render_template('hospital_reg_init.html',error_code=error_code)
         except:
             print("ERROR!!!!")
-            return render_template('hospital_reg_init.html')
-    return render_template('hospital_reg_init.html')
+            error_code=2
+            return render_template('hospital_reg_init.html',error_code=error_code)
+    return render_template('hospital_reg_init.html',error_code=error_code)
 
 @app.route('/hospRegisterUpdate',methods=['GET','POST'])
 def register_page_update():
@@ -94,6 +103,7 @@ def register_page_update():
 
 @app.route('/hospLogin', methods=['GET', 'POST'])
 def login_page():
+    error_code = 0
     if request.method == 'POST':
         hospDetails = request.form
         hosp_ID = hospDetails['hospID']
@@ -113,17 +123,25 @@ def login_page():
         if i == 1:
             session["hosp_ID"] = hospDetails[0][0]
             session["hospName"] = hospDetails[0][1]
-            flask.flash("Successful Login")
-            return render_template('hospital_after_login.html', hospName=session["hospName"])
+            hosp_ID = session["hosp_ID"]
+            cur = myconn.cursor()
+            cur.execute("SELECT * FROM Hospital WHERE hosp_ID ='%s'" % (int(hosp_ID)))
+            hospAllDetails = cur.fetchall()
+            return render_template('hospital_after_login.html', hospName=session["hospName"],hospAllDetails=hospAllDetails)
         else:
-            return render_template('hospital_login.html')
-    return render_template('hospital_login.html')
+            error_code=1
+            return render_template('hospital_login.html',error_code=error_code)
+    return render_template('hospital_login.html',error_code=error_code)
 
 
 @app.route('/hospAfterLogin', methods=['GET', 'POST'])
 def hospital_homepage():
-    return render_template('hospital_after_login.html', hospName=session["hospName"])
-
+    hosp_ID = session["hosp_ID"]
+    cur = myconn.cursor()
+    cur.execute("SELECT * FROM Hospital WHERE hosp_ID ='%s'" % (int(hosp_ID)))
+    hospAllDetails = cur.fetchall()
+    return render_template('hospital_after_login.html', hospName=session["hospName"],hospAllDetails=hospAllDetails)
+    
 
 @app.route('/updateVaccine', methods=['GET', 'POST'])
 def update_vaccine_details():

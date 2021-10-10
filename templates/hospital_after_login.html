@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
 
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}">
     <!-- Bootstrap CSS -->
@@ -14,9 +16,13 @@
       crossorigin="anonymous"
     />
 
+    
+
     <title> Hospital Home Page</title>
+
   </head>
   <body>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
      <!-- Populate the dropdown list with the 'features' list obtained from jinja -->
       <h1>{{ hospName }}</h1> <br><br><br>
@@ -37,7 +43,7 @@
 
       <div class="buttonContainer">
         <div class="innerDiv">
-          <a href="/hospRegisterUpdate" type="button" class="regUpdBtn">Complete/Update Hospital Registration</a>
+          <a href="/hospRegisterUpdate" type="button" class="regUpdBtn" id="regUpdBtn">Complete/Update Hospital Registration</a>
         </div>
       </div>
 

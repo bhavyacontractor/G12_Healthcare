@@ -80,7 +80,7 @@ height: 200px;
 position: relative;
 }
 
-.logOutBtn , .hospHomeBtn
+.logOutBtn , .hospHomeBtn , .hospRegHomeBtn
 {
   background-color: #008CBA;
   border: none;
