@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
   );
   
-    CREATE TABLE IF NOT EXISTS `BedDetails` (
+    CREATE TABLE IF NOT EXISTS `BedsDetails` (
   `hosp_ID` int,
   `BedsQuantity` int,
   PRIMARY KEY (`hosp_id`),
