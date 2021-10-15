@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   `OP_Quantity` int,
   `ON_Quantity` int,
   `ABP_Quantity` int,
-   `ABN_Quantiy` int,
+   `ABN_Quantity` int,
   PRIMARY KEY (`hosp_id`),
   FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
   );
