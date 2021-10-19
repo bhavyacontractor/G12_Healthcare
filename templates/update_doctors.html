@@ -1,12 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Doctors Update
-</body>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/styles.css') }}"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+
+
+
+    <title>Complete Hospital Registration</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <div class="container my-3">
+        <h1> Please Complete/Update the Doctor Details </h1><br>
+        <h2>Doctor email ID : {{ docDetails[0][0]}}</h2> <br>
+        <form action="/update_doctors" method="POST">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Update Doctor Name</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="text" class="form-control" id="docName" rows="1" name="docName" placeholder="{{ docDetails[0][1]}}"/>
+                </div>
+
+<!--                <h5 class="card-title">Update/Enter Doctor Speciality</h5>-->
+<!--                <div class="form-group" style="margin-bottom: 20px;">-->
+<!--                    <input type="text" class="form-control" id="doc_s" name="doc_s" placeholder="{{ docDetails[0][2]}}"/>-->
+<!--                </div>-->
+
+                <h5 class="card-title">Update/Enter Doctor Speciality</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <select class="form-control" id="doc_s" name="doc_s">
+                    <option value="{{ docDetails[0][2]}}">{{ docDetails[0][2]}}</option>
+                      <option value="General">General</option>
+                      <option value="Physician">Physician</option>
+                      <option value="Dentist">Dentist</option>
+                      <option value="Obstetrician">Obstetrician</option>
+                      <option value="Opthalmologist">Opthalmologist</option>
+                      <option value="ENT">ENT</option>
+                      <option value="Cardiologist">Cardiologist</option>
+                      <option value="Psychiatrist">Psychiatrist</option>
+                      <option value="Homeopath">Homeopath</option>
+                      <option value="Ayurveda">Ayurveda</option>
+                      </select>
+                </div>
+
+
+                <h5 class="card-title">Update/Enter Doctor Phone Number</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="number" class="form-control" id="docPhone" name="docPhone" placeholder="{{ docDetails[0][3]}}"/>
+                </div>
+
+                <h5 class="card-title">Update/Enter Doctor Address</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                  <textarea class="form-control" id="docAddress" rows="3" name="docAddress" placeholder="{{ docDetails[0][4]}}"></textarea>
+                </div>
+
+                <h5 class="card-title">Update/Enter Doctor's Hospital ID </h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                  <input type="number" class="form-control" id="hosp_id"  name="hosp_id" placeholder="{{ docDetails[0][6]}}"></input>
+                </div>
+
+                <button class="btn btn-primary" id="hospRegUpdateBtn">Update Doctor Details</button>
+            </div>
+        </div>
+      </form>
+      <br>
+      <div class="buttonContainer">
+        <div class="innerDiv">
+          <a href="/" type="button" class="hospHomeBtn">Go to Home</a>
+        </div>
+      </div>
+    </div>
+
+  </body>
 </html>
