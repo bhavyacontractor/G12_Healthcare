@@ -5,6 +5,7 @@ from flask_mysqldb import MySQL
 import mysql.connector
 from flask_session import Session
 from werkzeug.utils import redirect
+import datetime
 
 app = Flask(__name__)
 
@@ -17,7 +18,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 # myconn = mysql.connector.connect(host="localhost", user="root", passwd="@Bhakauhet92", database="healthcare",
 #                                  buffered=True)
 
-myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200001044mysql",database="healthcare_portal", buffered=True)
+myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200001044mysql",database="healthcare_portal", auth_plugin="200001044mysql",buffered=True)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -721,6 +722,59 @@ def logout():
     session.pop('Phone', None)
     session.pop('DOB', None)
     return render_template('home.html')
+
+@app.route('/appointments',methods = ['GET', 'POST'])
+def appointments():
+    today_details = tomorrow_details = dafter_details=[]
+    if request.method=='POST':
+        appointmentSettings = request.form
+        today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+        tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+        dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
+        print(today)
+        print(tomorrow)
+        print(dayafter)
+        doc_ID = appointmentSettings['doc_ID']
+        
+        try:
+            var1 = appointmentSettings['today']
+            query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,today,1)
+            cur = myconn.cursor()
+            cur.execute(query)
+            today_details = cur.fetchall()
+            myconn.commit()
+        except:
+            print("NoToday")
+        try:
+            var2 = appointmentSettings['tomorrow']
+            query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,tomorrow,1)
+            cur = myconn.cursor()
+            cur.execute(query)
+            tomorrow_details = cur.fetchall()
+            myconn.commit()
+        except:
+            print("No Tomorrow")
+        try:
+            var3 = appointmentSettings['dayafter']
+            query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,dayafter,1)
+            cur = myconn.cursor()
+            cur.execute(query)
+            dafter_details = cur.fetchall()
+            myconn.commit()
+        except:
+            print("No Day After")
+        
+        print(today_details)
+        print(tomorrow_details)
+        print(dafter_details)
+
+   
+
+    
+    return render_template('appointments_rough.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

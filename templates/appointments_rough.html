@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/styles.css') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <title>Appointments</title>
+</head>
+<body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+    <br>
+    <form action="/appointments" method="post" style="margin-left: 20px;">
+        <div class="mb-3">
+          <label for="doc_ID" class="form-label">Doctor ID</label>
+          <input type="text" class="form-control" id="doc_ID" name="doc_ID" style="width: 20%;">
+        </div>
+        <br>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="today" id="today" value="today"/>
+            <label class="form-check-label" for="today"> Today</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="tomorrow" id="tomorrow" value="tomorrow"/>
+            <label class="form-check-label" for="tomorrow"> Tomorrow</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="dayafter" id="dayafter" value="dayafter"/>
+            <label class="form-check-label" for="dayafter"> Day After Tomorrow</label>
+        </div>
+        <br>
+          
+        <button type="submit" class="btn btn-primary">Submit</button>
+           
+    </form>
+
+
+    <br>
+
+  
+
+    <h3>Today's Available Appointments</h3>
+    {% if today_details|length==0 %}
+      <br>
+      <h5>No Appointments Available</h5>
+    {% else %}
+
+      <table class="coursesTable" >
+        <thead class="thead">
+            <tr>
+                <th>S No</th>
+                <th>Time_ID</th>
+                <th>Doctor_ID</th>
+                <th>Start_Time</th>
+                <th>End_Time</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+      
+        <tbody class="tbody">
+            {% for row in today_details %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% for detail in row[:5] %}
+                        <td>{{detail}}</td>
+                    {% endfor %}     
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+
+    {% endif %}
+
+    <br>
+
+    <h3>Tomorrow's Available Appointments</h3>
+    {% if tomorrow_details|length==0 %}
+      <br>
+      <h5>No Appointments Available</h5>
+    {% else %}
+      <table class="coursesTable" >
+        <thead class="thead">
+            <tr>
+                <th>S No</th>
+                <th>Time_ID</th>
+                <th>Doctor_ID</th>
+                <th>Start_Time</th>
+                <th>End_Time</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+      
+        <tbody class="tbody">
+            {% for row in tomorrow_details%}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% for detail in row[:5] %}
+                        <td>{{detail}}</td>
+                    {% endfor %}     
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    <br>
+
+    <h3>Day After Tomorrow's Available Appointments</h3>
+    {% if dafter_details|length==0 %}
+      <br>
+      <h5>No Appointments Available</h5>
+    {% else %}
+      <table class="coursesTable" >
+        <thead class="thead">
+            <tr>
+                <th>S No</th>
+                <th>Time_ID</th>
+                <th>Doctor_ID</th>
+                <th>Start_Time</th>
+                <th>End_Time</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+      
+        <tbody class="tbody">
+            {% for row in dafter_details %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% for detail in row[:5] %}
+                        <td>{{detail}}</td>
+                    {% endfor %}     
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    <br>
+
+</body>
+</html>
