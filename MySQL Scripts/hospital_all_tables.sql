@@ -62,3 +62,15 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
   );
   
+  
+  CREATE TABLE IF NOT EXISTS `doctor` (
+  `doc_ID` varchar(100),
+  `docName` varchar(255),
+  `doc_s` varchar(255),
+  `docPhone` INT,
+  `docAddress` varchar(255),
+  `docPassword` varchar(255),
+  `hosp_ID` INT,
+  PRIMARY KEY (`doc_id`),
+  FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
+  );
