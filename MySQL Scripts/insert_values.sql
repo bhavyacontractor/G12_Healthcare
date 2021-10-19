@@ -1,11 +1,15 @@
 -- Date format is YYYY-MM-DD
 
-INSERT INTO `TimeSlots` (Doc_ID,Start_Time,End_Time,Appt_Date,Availability)
+INSERT INTO `doctor` (doc_ID,docName,docPassword)
 VALUES
-('doctor1@hospital.com','08:00:00','10:00:00','2015-09-13',1);
+('doctor1@hospital.com','Doctor One','docpass1'),
+('doctor2@hospital.com','Doctor Two','docpass2'),
+('doctor3@hospital.com','Doctor Three','docpass3');
+
 
 INSERT INTO `TimeSlots` (Doc_ID,Start_Time,End_Time,Appt_Date,Availability)
 VALUES
+('doctor1@hospital.com','08:00:00','10:00:00','2015-09-13',1),
 ('doctor1@hospital.com','08:30:00','10:00:00','2015-09-23',1),
 ('doctor2@hospital.com','07:40:00','09:00:00','2016-05-14',1),
 ('doctor2@hospital.com','09:20:00','11:00:00','2016-07-03',0),
