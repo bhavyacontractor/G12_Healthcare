@@ -92,12 +92,14 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   
     CREATE TABLE IF NOT EXISTS `Appointment` (
     `User_ID` int,
-  `Time_ID` int,
+	`Time_ID` int,
+    `doc_ID` varchar(100),
   `MeetLink` varchar(100),
   `PreDescription` varchar(100),
   `PostDescription` varchar(100),
   PRIMARY KEY (`User_ID`,`Time_ID`),
   FOREIGN KEY (`User_ID`) REFERENCES Users(`User_ID`),
-   FOREIGN KEY (`Time_ID`) REFERENCES TimeSlots(`Time_ID`)
+   FOREIGN KEY (`Time_ID`) REFERENCES TimeSlots(`Time_ID`),
+   FOREIGN KEY (`Doc_id`) REFERENCES Doctor(`doc_ID`)
   );
   
