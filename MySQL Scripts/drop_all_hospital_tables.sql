@@ -6,6 +6,7 @@ DROP TABLE `AmbulanceDetails`;
 DROP TABLE `BloodDetails`;
 
 DROP TABLE `Doctor`;
+DROP TABLE `TimeSlots`;
 
 DROP TABLE `Hospital`;
 

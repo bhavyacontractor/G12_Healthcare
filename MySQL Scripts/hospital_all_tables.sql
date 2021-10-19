@@ -75,17 +75,20 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
   );
   
+  -- Date format is YYYY-MM-DD
     
     CREATE TABLE IF NOT EXISTS `TimeSlots` (
-  `Time_ID` int,
+  `Time_ID` int auto_increment,
   `Doc_ID` varchar(100),
   `Start_Time` time,
   `End_Time` time,
-  `Date` date,
+  `Appt_Date` date,
   `Availability` int,
   PRIMARY KEY (`Time_ID`),
   FOREIGN KEY (`Doc_id`) REFERENCES Doctor(`doc_ID`)
   );
+  
+  
   
     CREATE TABLE IF NOT EXISTS `Appointment` (
     `User_ID` int,
