@@ -78,13 +78,13 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
     
     CREATE TABLE IF NOT EXISTS `TimeSlots` (
   `Time_ID` int,
-  `Doctor_ID` int,
+  `Doc_ID` varchar(100),
   `Start_Time` time,
   `End_Time` time,
   `Date` date,
   `Availability` int,
   PRIMARY KEY (`Time_ID`),
-  FOREIGN KEY (`doctor_id`) REFERENCES Doctor(`doctor_id`)
+  FOREIGN KEY (`Doc_id`) REFERENCES Doctor(`doc_ID`)
   );
   
     CREATE TABLE IF NOT EXISTS `Appointment` (
