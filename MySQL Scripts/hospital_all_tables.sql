@@ -74,3 +74,27 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   PRIMARY KEY (`doc_id`),
   FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
   );
+  
+    
+    CREATE TABLE IF NOT EXISTS `TimeSlots` (
+  `Time_ID` int,
+  `Doctor_ID` int,
+  `Start_Time` time,
+  `End_Time` time,
+  `Date` date,
+  `Availability` int,
+  PRIMARY KEY (`Time_ID`),
+  FOREIGN KEY (`doctor_id`) REFERENCES Doctor(`doctor_id`)
+  );
+  
+    CREATE TABLE IF NOT EXISTS `Appointment` (
+    `User_ID` int,
+  `Time_ID` int,
+  `MeetLink` varchar(100),
+  `PreDescription` varchar(100),
+  `PostDescription` varchar(100),
+  PRIMARY KEY (`User_ID`,`Time_ID`),
+  FOREIGN KEY (`User_ID`) REFERENCES Users(`User_ID`),
+   FOREIGN KEY (`Time_ID`) REFERENCES TimeSlots(`Time_ID`)
+  );
+  
