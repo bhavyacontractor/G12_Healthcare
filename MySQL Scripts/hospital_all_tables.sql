@@ -75,6 +75,15 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
   );
   
+  CREATE TABLE IF NOT EXISTS `user` (
+  `UserId` INT NOT NULL,
+  `UserName` VARCHAR(45) NULL DEFAULT NULL,
+  `UserPassword` VARCHAR(45) NULL DEFAULT NULL,
+  `UserAddress` VARCHAR(45) NULL DEFAULT NULL,
+  `UserPhone` INT NULL DEFAULT NULL,
+  `UserDOB` DATE NULL DEFAULT NULL,
+  PRIMARY KEY (`UserId`));
+  
   -- Date format is YYYY-MM-DD
     
     CREATE TABLE IF NOT EXISTS `TimeSlots` (
@@ -91,14 +100,14 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   
   
     CREATE TABLE IF NOT EXISTS `Appointment` (
-    `User_ID` int,
+    `UserID` int,
 	`Time_ID` int,
     `doc_ID` varchar(100),
   `MeetLink` varchar(100),
   `PreDescription` varchar(100),
   `PostDescription` varchar(100),
-  PRIMARY KEY (`User_ID`,`Time_ID`),
-  FOREIGN KEY (`User_ID`) REFERENCES Users(`User_ID`),
+  PRIMARY KEY (`UserID`,`Time_ID`),
+  FOREIGN KEY (`UserID`) REFERENCES User(`UserID`),
    FOREIGN KEY (`Time_ID`) REFERENCES TimeSlots(`Time_ID`),
    FOREIGN KEY (`Doc_id`) REFERENCES Doctor(`doc_ID`)
   );
