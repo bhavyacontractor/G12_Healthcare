@@ -25,7 +25,7 @@ myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
-    return render_template('home.html', polarity='none', subjectivity='none')
+    return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
 @app.route("/analyze", methods=['GET', 'POST'])
 def analyze():
@@ -672,7 +672,7 @@ def update_doctors():
 
 @app.route('/user')
 def home():
-    return render_template('user_home.html', polarity='none', subjectivity='none')
+    return render_template('user_home.html')
 
 @app.route('/user_login', methods = ['GET', 'POST'])
 def login():
@@ -738,7 +738,7 @@ def logout():
     session.pop('Address', None)
     session.pop('Phone', None)
     session.pop('DOB', None)
-    return render_template('home.html', polarity='none', subjectivity='none')
+    return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
 @app.route('/appointments',methods = ['GET', 'POST'])
 def appointments():
