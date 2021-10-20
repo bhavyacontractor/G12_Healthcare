@@ -5,6 +5,7 @@ DROP TABLE `BedsDetails`;
 DROP TABLE `AmbulanceDetails`;
 DROP TABLE `BloodDetails`;
 
+DROP TABLE `Appointment`;
 DROP TABLE `TimeSlots`;
 DROP TABLE `Doctor`;
 DROP TABLE `User`;

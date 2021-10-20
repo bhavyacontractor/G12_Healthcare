@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `Hospital` (
-  `hosp_ID` INT,
+  `hosp_ID` int,
   `hospName` varchar(255),
   `hospEmail` varchar(255),
   `hospPhone` INT,
@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   `MeetLink` varchar(100),
   `PreDescription` varchar(100),
   `PostDescription` varchar(100),
+  `Acceptance_Status` int,
   PRIMARY KEY (`UserID`,`Time_ID`),
   FOREIGN KEY (`UserID`) REFERENCES User(`UserID`),
    FOREIGN KEY (`Time_ID`) REFERENCES TimeSlots(`Time_ID`),

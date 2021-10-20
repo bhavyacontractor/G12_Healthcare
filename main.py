@@ -487,65 +487,6 @@ def add_ambulance():
     cur.close()
     return redirect('/updateAmbulance')
 
-# @app.route('/doctor_reg', methods=['GET', 'POST'])
-# def doctor_reg():
-#     if request.method == 'POST':
-#         # print('hello')
-#         doc_id = request.form['docUserName']
-#         hosp_id = request.form['hosp_id']
-#         docSpeciality = request.form['docSpeciality']
-#         docName = request.form.get('docName')
-#         docEmail = request.form['docEmail']
-#         docPhone = request.form['docPhone']
-#         docAddress = request.form['docAddress']
-#         docPassword = request.form['docPassword']
-#         cur = myconn.cursor()
-#         cur.execute('SELECT * FROM doctor WHERE doc_id=%s', (doc_id,))
-
-#         account = cur.fetchone()
-#         if account:
-#             return "doc_id exists already"
-#         else:
-#             cur.execute('INSERT INTO doctor VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
-#                         (doc_id, hosp_id, docSpeciality, docName, docEmail, docPhone, docAddress, docPassword,))
-#             myconn.commit()
-#             return render_template('doctor_login.html')
-#     return render_template('doctor_reg.html')
-
-
-# @app.route('/doctor_login', methods=['GET', "POST"])
-# def doctor_login():
-#     if request.method == 'POST':
-#         doc_id = request.form['docUserName']
-#         docPassword = request.form['docPassword']
-#         cur = myconn.cursor()
-#         cur.execute('SELECT * FROM doctor WHERE doc_id=%s AND docPassword=%s', (doc_id, docPassword,))
-#         account = cur.fetchone()
-#         myconn.commit()
-#         if account:
-#             session['doc_id'] = doc_id
-#             return render_template('doctor_after_login.html')
-#         else:
-#             return "wrong id and password"
-#     return render_template('doctor_login.html')
-
-# @app.route('/update_doc_info', methods = ['GET', 'POST'])
-# def update_doc_info():
-#     if request.method == 'POST':
-#         # print(session['docEmail'])
-#         docName = request.form.get('docName')
-#         docSpeciality = request.form['docSpeciality']
-#         hosp_id = request.form['hosp_id']
-#         docPhone = request.form['docPhone']
-#         docAddress = request.form['docAddress']
-#         cursor = myconn.cursor()
-#         cursor.execute('UPDATE doctor SET docAddress=%s, docPhone=%s, hosp_id=%s, docSpeciality=%s, docName=%s WHERE doc_id=%s', (docAddress, docPhone, hosp_id,docSpeciality,docName ,session['doc_id'],))
-#         myconn.commit()
-#         return render_template('doctor_after_login.html')
-
-#     return render_template('doctor_after_login.html')
-
-
 @app.route('/doctor_reg', methods=['GET', 'POST'])
 def doctor_reg():
     error_code = 0
