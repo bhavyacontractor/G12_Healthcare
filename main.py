@@ -36,11 +36,12 @@ def analyze():
         result = TextBlob(statement).sentiment
         print(result)
         # print("Polarity: {:1f.4} , Subjectivity: {:1f.4}".format(result.polarity, result.subjectivity))
-        polarity = result.polarity
-        subjectivity = result.subjectivity
+        polarity = float(result.polarity)
+        subjectivity = float(result.subjectivity)
+        print(type(polarity))
         return render_template('home.html', polarity=round(polarity, 4), subjectivity=round(subjectivity, 4))
 
-    return render_template('home.html', polarity='none', subjectivity='none')
+    return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
 @app.route('/hospRegisterInitial',methods=['GET','POST'])
 def register_page_init():
