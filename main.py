@@ -767,10 +767,6 @@ def appointments():
         print(today_details)
         print(tomorrow_details)
         print(dafter_details)
-
-   
-
-    
     return render_template('appointments_rough.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details)
 
 
