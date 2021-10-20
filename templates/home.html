@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/styles.css">
     <style>
         a{
@@ -11,14 +12,41 @@
     </style>
 </head>
 <body>
-    <center>
-        <h1 style="color: white;">HealthCare Portal</h1> <br> <br>
-    <a href="/hospRegisterInitial" class="logOutBtn">Hospital Register</a> <br> <br>
-    <a href="/hospLogin" class="logOutBtn">Hospital Login</a> <br> <br>
-    <a href="/doctor_reg" class="logOutBtn">Doctor Registration</a> <br> <br>
-    <a href="/doctor_login" class="logOutBtn">Doctor Login</a> <br> <br>
-    <a href="/user" class="logOutBtn">User</a> <br> <br>
-    <a href="/appointments" class="logOutBtn">Appointments</a> <br> <br>
-    </center>
+    <!-- <center> -->
+        <br>
+        <center><h1 style="color: white;">HealthCare Portal</h1> <br> <br></center>
+        <div class="base">
+        <div class="flex_box" id="first_flex">
+            <h5 style="font-weight: 400; color: white;">Give Your Feedback!!</h5>
+            <form action="/analyze" method="POST">
+                <textarea name="statement" id="" rows="4"></textarea>
+                <!-- <input type="text" name="statement" id=""> -->
+                <br>
+                <button type="submit" class="btn btn-primary">Analyze</button>
+            </form>
+            <br> <br> <br>
+            {% if subjectivity|int < 0.005 and subjectivity != 'none' %}
+                <h5 style="font-weight: 400; color: white;">Subjective Statement.</h5>
+            {% else %}
+                {% if polarity|int >= 0 and subjectivity != 'none' %}
+                    <h5 style="font-weight: 400; color: white;">Positive Statement! Thanks for your feedback.</h5>
+                {% endif %}
+                {% if polarity|int < 0 and subjectivity != 'none' %}
+                    <h5 style="font-weight: 400; color: white;">Negative Statement! We'll try to improve our service. Thanks for your feedback.</h5>            
+                {% endif %}
+            {% endif %}
+        </div>
+        <!-- <center> -->
+        <div class="flex_box">
+            <a href="/hospRegisterInitial" class="logOutBtn">Hospital Register</a> <br> <br>
+            <a href="/hospLogin" class="logOutBtn">Hospital Login</a> <br> <br>
+            <a href="/doctor_reg" class="logOutBtn">Doctor Registration</a> <br> <br>
+            <a href="/doctor_login" class="logOutBtn">Doctor Login</a> <br> <br>
+            <a href="/user" class="logOutBtn">User</a> <br> <br>
+            <a href="/appointments" class="logOutBtn">Appointments</a> <br> <br>
+        </div>
+    </div>
+    <!-- </center> -->
+    <!-- </center> -->
 </body>
 </html>
