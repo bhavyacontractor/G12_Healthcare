@@ -23,8 +23,21 @@ myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
-    return render_template('home.html')
+    return render_template('home.html', polarity='none', subjectivity='none')
 
+@app.route("/analyze", methods=['GET', 'POST'])
+def analyze():
+    flag="not entered"
+    if request.method == 'POST':
+        flag="entered"
+        statement = request.form.get('statement')
+        result = TextBlob(statement).sentiment
+        # print("Polarity: {:1f.4} , Subjectivity: {:1f.4}".format(result.polarity, result.subjectivity))
+        polarity = result.polarity
+        subjectivity = result.subjectivity
+        return render_template('home.html', polarity=round(polarity, 4), subjectivity=round(subjectivity, 4))
+
+    return render_template('home.html', polarity='none', subjectivity='none')
 
 @app.route('/hospRegisterInitial',methods=['GET','POST'])
 def register_page_init():
@@ -655,7 +668,7 @@ def update_doctors():
 
 @app.route('/user')
 def home():
-    return render_template('user_home.html')
+    return render_template('user_home.html', polarity='none', subjectivity='none')
 
 @app.route('/user_login', methods = ['GET', 'POST'])
 def login():
@@ -721,7 +734,7 @@ def logout():
     session.pop('Address', None)
     session.pop('Phone', None)
     session.pop('DOB', None)
-    return render_template('home.html')
+    return render_template('home.html', polarity='none', subjectivity='none')
 
 @app.route('/appointments',methods = ['GET', 'POST'])
 def appointments():
