@@ -25,13 +25,13 @@
                 <button type="submit" class="btn btn-primary">Analyze</button>
             </form>
             <br> <br> <br>
-            {% if subjectivity|int < 0.005 and subjectivity != 'none' %}
+            {% if subjectivity < 0.005 and subjectivity != 'none' %}
                 <h5 style="font-weight: 400; color: white;">Subjective Statement.</h5>
             {% else %}
-                {% if polarity|int >= 0 and subjectivity != 'none' %}
+                {% if polarity >= 0 and subjectivity != 'none' %}
                     <h5 style="font-weight: 400; color: white;">Positive Statement! Thanks for your feedback.</h5>
                 {% endif %}
-                {% if polarity|int < 0 and subjectivity != 'none' %}
+                {% if polarity < 0 and subjectivity != 'none' %}
                     <h5 style="font-weight: 400; color: white;">Negative Statement! We'll try to improve our service. Thanks for your feedback.</h5>            
                 {% endif %}
             {% endif %}

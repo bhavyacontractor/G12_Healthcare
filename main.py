@@ -4,8 +4,10 @@ import flask
 from flask_mysqldb import MySQL
 import mysql.connector
 from flask_session import Session
+from nltk.util import pr
 from werkzeug.utils import redirect
 import datetime
+from textblob import TextBlob
 
 app = Flask(__name__)
 
@@ -32,6 +34,7 @@ def analyze():
         flag="entered"
         statement = request.form.get('statement')
         result = TextBlob(statement).sentiment
+        print(result)
         # print("Polarity: {:1f.4} , Subjectivity: {:1f.4}".format(result.polarity, result.subjectivity))
         polarity = result.polarity
         subjectivity = result.subjectivity
