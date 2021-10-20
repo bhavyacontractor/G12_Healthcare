@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
     <title>Beds</title>
 </head>
 <body>
@@ -24,6 +30,7 @@
     </div>
   </nav>
   <br>
+  <div class="container my-3">
   <h1>{{ hospName }}</h1> <br>
 
   {% if hospBedsDetails|length == 0 %}
@@ -32,22 +39,27 @@
 
   <form action="/addBeds" method="POST">
      <button class="btn btn-primary" id="hospBedsAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
- </form>
+ </form></div>
 
  {% else %}
+ <div class="container my-3">
   <h2>Beds Status</h2> <br>
 
   <form method="post" action="/updateBeds">
-  <input type="number" placeholder="{{ hospBedsDetails[0][1] }}" name="bed" id="bed">
-  <input type="submit" value="Update">
+    <div class="card">
+      <div class="card-body">
+          <h5 class="card-title">Enter number of beds</h5>
+          <div class="form-group" style="margin-bottom: 20px;">
+  <input type="number" placeholder="{{ hospBedsDetails[0][1] }}" name="bed" id="bed"></div>
+  <button class="btn btn-primary" type="submit">Update</button>
   {% endif %}
-
+      </div></div></form></div>
   <div class="buttonContainer">
     <div class="innerDiv">
       <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
     </div>
 </div>
 
-</form>
+
 </body>
 </html>

@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
     <title>Blood</title>
 </head>
 <body>
@@ -22,7 +28,7 @@
         </div>
       </nav>
       <br>
-
+      <div class="container my-3">
     <h1>{{ hospName }}</h1> <br><br><br>
 
     {% if hospBloodDetails|length == 0 %}
@@ -31,38 +37,51 @@
 
     <form action="/addBlood" method="POST">
     <button class="btn btn-primary" id="hospVaccAddBtn" style="margin-left: 640px; margin-top: 40px;">Add Hospital</button>
-    </form>
+    </form></div>
 
 
     {% else %}
-
+    <div class="container my-3">
+        <h1>Availability of Blood</h1>
     <form method="post" action="/updateBlood">
-        <input name="ap" id="ap" placeholder="A+ Quantity: {{ hospBloodDetails[0][1]}}" type="number"><br>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">A+ve</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+        <input name="ap" id="ap" placeholder="A+ Quantity: {{ hospBloodDetails[0][1]}}" type="number"></div>
         <!-- <label for="ap">A+</label> <br> -->
-
-        <input name="an" id="an" placeholder="A- Quantity: {{ hospBloodDetails[0][2]}}" type="number"><br>
+        <h5 class="card-title">A-ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="an" id="an" placeholder="A- Quantity: {{ hospBloodDetails[0][2]}}" type="number"></div>
         <!-- <label for="an">A-</label> <br> -->
-
-        <input name="bp" id="bp" placeholder="B+ Quantity: {{ hospBloodDetails[0][3]}}" type="number"><br>
+        <h5 class="card-title">B+ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="bp" id="bp" placeholder="B+ Quantity: {{ hospBloodDetails[0][3]}}" type="number"></div>
         <!-- <label for="bp">B+</label> <br> -->
-
-        <input name="bn" id="bn" placeholder="B- Quantity: {{ hospBloodDetails[0][4]}}" type="number"><br>
+        <h5 class="card-title">B-ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="bn" id="bn" placeholder="B- Quantity: {{ hospBloodDetails[0][4]}}" type="number"></div>
         <!-- <label for="bn">B-</label> <br> -->
-
-        <input name="op" id="op" placeholder="O+ Quantity: {{ hospBloodDetails[0][5]}}" type="number"><br>
+        <h5 class="card-title">O+ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="op" id="op" placeholder="O+ Quantity: {{ hospBloodDetails[0][5]}}" type="number"></div>
         <!-- <label for="op">O+</label> <br> -->
-
-        <input name="on" id="on" placeholder="O- Quantity: {{ hospBloodDetails[0][6]}}" type="number"><br>
+        <h5 class="card-title">O-ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="on" id="on" placeholder="O- Quantity: {{ hospBloodDetails[0][6]}}" type="number"></div>
         <!-- <label for="on">O-</label> <br> -->
-
-        <input name="abp" id="abp" placeholder="AB+ Quantity: {{ hospBloodDetails[0][7]}}" type="number"><br>
+        <h5 class="card-title">AB+ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="abp" id="abp" placeholder="AB+ Quantity: {{ hospBloodDetails[0][7]}}" type="number"></div>
         <!-- <label for="abp">AB+</label> <br> -->
-
-        <input name="abn" id="abn" placeholder="AB- Quantity: {{ hospBloodDetails[0][8]}}" type="number"><br>
+        <h5 class="card-title">AB-ve</h5>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input name="abn" id="abn" placeholder="AB- Quantity: {{ hospBloodDetails[0][8]}}" type="number"></div>
         <!-- <label for="abn">AB-</label> <br> -->
 
-        <input type="submit" value="Update">
-    </form>
+        <button class="btn btn-primary" type="submit">Update</button>
+            </div></div>
+    </form></div>
 
     {% endif %}
 
