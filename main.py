@@ -549,6 +549,12 @@ def doctor_login():
             return render_template('doctor_login.html', error_code=error_code)
     return render_template('doctor_login.html', error_code=error_code)
 
+@app.route('/doctor_after_login', methods=['GET', 'POST'])
+def doctor_after_login():
+    return render_template('doctor_after_login.html', docName=session["docName"],
+                                   docAllDetails='')
+
+
 @app.route('/update_doctors', methods=['GET', 'POST'])
 def update_doctors():
     if request.method == 'POST':
@@ -688,7 +694,7 @@ def logout():
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
 @app.route('/show_appointments',methods = ['GET', 'POST'])
-def appointments():
+def show_appointments():
     today_details = tomorrow_details = dafter_details=[]
     if request.method=='POST':
         appointmentSettings = request.form
@@ -758,7 +764,42 @@ def request_appointment(Time_ID):
 
     return render_template('show_appointments.html',today_details='',tomorrow_details='',dafter_details='')
 
+@app.route('/view_appointments',methods = ['GET', 'POST'])
+def view_appointments():
+    Doc_ID = session['doc_ID']
+    query = '''
+        SELECT apt.UserID,apt.doc_ID,apt.MeetLink,apt.PreDescription,apt.PostDescription,apt.Acceptance_Status,
+               tslots.Start_Time,tslots.End_Time,tslots.Appt_Date,
+               user.UserName , user.UserPhone,
+               apt.Time_ID
+        FROM appointment apt 
+        JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
+        JOIN user user on apt.UserID = user.UserID
+        WHERE apt.doc_ID='%s' 
+        ORDER BY tslots.Appt_Date ASC''' %(Doc_ID)
 
+    cur = myconn.cursor()
+    cur.execute(query)
+    appointments = cur.fetchall()
+    print(appointments)
+    return render_template('view_appointments.html',appointments=appointments)
+
+@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST'])
+def appointment_action(Time_ID,UserID,action):
+    print(Time_ID,UserID,action)
+    if action=='Accept':
+        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(1,Time_ID,UserID)
+    elif action=='Reject':
+        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(2,Time_ID,UserID)
+    elif action=='Cancel':
+        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(3,Time_ID,UserID)
+    
+    cur = myconn.cursor()
+    cur.execute(query)
+    myconn.commit()
+
+
+    return redirect('/view_appointments')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
