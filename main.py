@@ -613,7 +613,7 @@ def update_doctors():
 
 @app.route('/user')
 def home():
-    return render_template('user_home.html')
+    return render_template('user_home.html',error_code=0)
 
 @app.route('/user_login', methods = ['GET', 'POST'])
 def login():
@@ -632,28 +632,34 @@ def login():
             session['DOB'] = acc[5]
             return render_template('user_index.html')
         else:
-            return 'User not found!!'
+            return render_template('user_home.html',error_code=2)
 
 @app.route('/user_register', methods = ['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        userid = request.form['userid']
-        name = request.form['name']
-        passwd = request.form['passwd']
-        cpasswd = request.form['cpasswd']
-        cur = myconn.cursor()
-        cur.execute('INSERT INTO user (UserId, UserName, UserPassword) VALUES (%s, %s, %s)', (userid, name, passwd))
-        myconn.commit()
-        cur.close()
-        session['loggedin'] = True
-        session['UserId'] = userid
-        session['Name'] = name
-        session['Address'] = ''
-        session['Phone'] = ''
-        session['DOB'] = ''
-        return render_template('user_index.html')
+        try:
+            userid = request.form['userid']
+            name = request.form['name']
+            passwd = request.form['passwd']
+            cpasswd = request.form['cpasswd']
+            if passwd!=cpasswd:
+                return render_template('user_home.html',error_code=3)
+            
+            cur = myconn.cursor()
+            cur.execute('INSERT INTO user (UserId, UserName, UserPassword) VALUES (%s, %s, %s)', (userid, name, passwd))
+            myconn.commit()
+            cur.close()
+            # session['loggedin'] = True
+            # session['UserId'] = userid
+            # session['Name'] = name
+            # session['Address'] = ''
+            # session['Phone'] = ''
+            # session['DOB'] = ''
+            return render_template('user_home.html',error_code=1)
+        except:
+            return render_template('user_home.html',error_code=2)
 
-    return render_template('register.html')
+    
 
 @app.route('/user_update', methods = ['GET', 'POST'])
 def update():
@@ -681,7 +687,7 @@ def logout():
     session.pop('DOB', None)
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
-@app.route('/appointments',methods = ['GET', 'POST'])
+@app.route('/show_appointments',methods = ['GET', 'POST'])
 def appointments():
     today_details = tomorrow_details = dafter_details=[]
     if request.method=='POST':
@@ -725,8 +731,32 @@ def appointments():
         print(today_details)
         print(tomorrow_details)
         print(dafter_details)
-    return render_template('appointments_rough.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details)
+    return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details)
 
+#Acceptance_Status = 0 ... Request has been sent and is pending
+#Acceptance Status = 1 ... Request has been accepted
+#Acceptance Status = 2 ... Request has been declined
+#Acceptance Status = 3 ... Request has been cancelled
+
+
+@app.route('/request_appointment/<int:Time_ID>', methods=['GET', 'POST'])
+def request_appointment(Time_ID):
+    UserID = session['UserId']
+    Time_ID = Time_ID
+    query = "SELECT DISTINCT Doc_ID FROM TimeSlots where Time_ID=%s"%(Time_ID)
+    cur = myconn.cursor()
+    cur.execute(query)
+    Doc_ID = (cur.fetchone())[0]
+    query ='''INSERT INTO appointment (UserID,Time_ID,doc_ID,MeetLink,PreDescription,PostDescription,Acceptance_Status)
+    VALUES (%s, %s, '%s','%s','%s','%s',%s)
+    ''' % (UserID,Time_ID,Doc_ID,'www.googlemeet.com','Hello','',0)
+
+    cur.execute(query)
+    myconn.commit()
+
+    print(UserID,Time_ID,Doc_ID)
+
+    return render_template('show_appointments.html',today_details='',tomorrow_details='',dafter_details='')
 
 
 
