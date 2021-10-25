@@ -775,14 +775,21 @@ def view_appointments():
         FROM appointment apt 
         JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
         JOIN user user on apt.UserID = user.UserID
-        WHERE apt.doc_ID='%s' 
-        ORDER BY tslots.Appt_Date ASC''' %(Doc_ID)
+        WHERE apt.doc_ID='%s' AND (apt.Acceptance_Status=%s OR apt.Acceptance_Status=%s)
+        ORDER BY tslots.Appt_Date ASC''' %(Doc_ID,0,1)
 
+    #Acceptance_Status = 0 ... Request has been sent and is pending
+    #Acceptance Status = 1 ... Request has been accepted
+    #Acceptance Status = 2 ... Request has been declined
+    #Acceptance Status = 3 ... Request has been cancelled
+
+
+    status = {0:'Request Pending',1:'Request Accepted',2:'Request Declined',3:'Request Cancelled'}
     cur = myconn.cursor()
     cur.execute(query)
     appointments = cur.fetchall()
     print(appointments)
-    return render_template('view_appointments.html',appointments=appointments)
+    return render_template('view_appointments.html',appointments=appointments,status=status)
 
 @app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST'])
 def appointment_action(Time_ID,UserID,action):
@@ -797,8 +804,7 @@ def appointment_action(Time_ID,UserID,action):
     cur = myconn.cursor()
     cur.execute(query)
     myconn.commit()
-
-
+    
     return redirect('/view_appointments')
 
 if __name__ == '__main__':

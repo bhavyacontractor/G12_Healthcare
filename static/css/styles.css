@@ -71,6 +71,16 @@ textarea:focus{
 }
 
 
+a.doctoraction {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+
+  text-decoration: none;
+  color: blue;
+}
+
+
 .coursesTable {
   margin-top: 20px;
   border-collapse: collapse;
