@@ -693,7 +693,7 @@ def logout():
     session.pop('DOB', None)
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
-@app.route('/show_appointments',methods = ['GET', 'POST'])
+@app.route('/show_appointments',methods = ['GET', 'POST']) #On User's Side
 def show_appointments():
     today_details = tomorrow_details = dafter_details=[]
     if request.method=='POST':
@@ -737,6 +737,12 @@ def show_appointments():
         print(today_details)
         print(tomorrow_details)
         print(dafter_details)
+
+    today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+    tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
+
+
     return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details)
 
 #Acceptance_Status = 0 ... Request has been sent and is pending
@@ -745,7 +751,7 @@ def show_appointments():
 #Acceptance Status = 3 ... Request has been cancelled
 
 
-@app.route('/request_appointment/<int:Time_ID>', methods=['GET', 'POST'])
+@app.route('/request_appointment/<int:Time_ID>', methods=['GET', 'POST']) #On User's Side
 def request_appointment(Time_ID):
     UserID = session['UserId']
     Time_ID = Time_ID
@@ -764,7 +770,7 @@ def request_appointment(Time_ID):
 
     return render_template('show_appointments.html',today_details='',tomorrow_details='',dafter_details='')
 
-@app.route('/view_appointments',methods = ['GET', 'POST'])
+@app.route('/view_appointments',methods = ['GET', 'POST']) #On Doctor's Side
 def view_appointments():
     Doc_ID = session['doc_ID']
     query = '''
@@ -791,7 +797,7 @@ def view_appointments():
     print(appointments)
     return render_template('view_appointments.html',appointments=appointments,status=status)
 
-@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST'])
+@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST']) #On Doctor's Side
 def appointment_action(Time_ID,UserID,action):
     print(Time_ID,UserID,action)
     if action=='Accept':
@@ -806,6 +812,36 @@ def appointment_action(Time_ID,UserID,action):
     myconn.commit()
     
     return redirect('/view_appointments')
+
+@app.route('/appointment_notifications',methods = ['GET', 'POST']) #On User's Side
+def appointment_notifications():
+    UserID = session['UserId']
+    query = '''
+        SELECT apt.UserID,apt.doc_ID,apt.MeetLink,apt.PreDescription,apt.PostDescription,apt.Acceptance_Status,
+               tslots.Start_Time,tslots.End_Time,tslots.Appt_Date,
+               user.UserName , user.UserPhone,
+               apt.Time_ID
+        FROM appointment apt 
+        JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
+        JOIN user user on apt.UserID = user.UserID
+        WHERE apt.UserID='%s'
+        ORDER BY tslots.Appt_Date ASC''' %(UserID)
+
+    #Acceptance_Status = 0 ... Request has been sent and is pending
+    #Acceptance Status = 1 ... Request has been accepted
+    #Acceptance Status = 2 ... Request has been declined
+    #Acceptance Status = 3 ... Request has been cancelled
+
+
+    status = {0:'Request Pending',1:'Request Accepted',2:'Request Declined',3:'Request Cancelled'}
+    cur = myconn.cursor()
+    cur.execute(query)
+    appointments = cur.fetchall()
+    print(appointments)
+    return render_template('appointment_notifications.html',appointments=appointments,status=status)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
