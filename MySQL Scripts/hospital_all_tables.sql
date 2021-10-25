@@ -113,6 +113,18 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
    FOREIGN KEY (`Doc_id`) REFERENCES Doctor(`doc_ID`)
   );
   
+  CREATE TABLE IF NOT EXISTS `chat` (
+  `chat_time` TIME NOT NULL,
+  `sender_id` VARCHAR(45) NOT NULL,
+  `receiver_id` VARCHAR(45) NOT NULL,
+  `msg` VARCHAR(45) NULL DEFAULT NULL,
+  `chat_date` DATE NOT NULL,
+  PRIMARY KEY (`chat_time`, `sender_id`, `receiver_id`, `chat_date`));
+  
+  
+  
+  
+  
 #Acceptance_Status = 0 ... Request has been sent and is pending
 #Acceptance Status = 1 ... Request has been accepted
 #Acceptance Status = 2 ... Request has been declined

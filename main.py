@@ -535,15 +535,32 @@ def doctor_login():
         myconn.commit()
         cur.close()
 
+       
+
         if i == 1:
             session["doc_ID"] = docDetails[0][0]
             session["docName"] = docDetails[0][1]
+            session['sender_id'] = docDetails[0][0]
+            session['type'] = 'doctor'
             doc_ID = session["doc_ID"]
             cur = myconn.cursor()
             cur.execute("SELECT * FROM doctor WHERE doc_ID ='%s'" % (doc_ID))
             docAllDetails = cur.fetchall()
+            myconn.commit()
+            cur.close()
+
+            cur = myconn.cursor()
+            cur.execute('SELECT * FROM user')
+            session['acc1'] = cur.fetchall()
+            myconn.commit()
+            cur.close()
+
+
             return render_template('doctor_after_login.html', docName=session["docName"],
                                    docAllDetails=docAllDetails)
+
+            
+            
         else:
             error_code = 1
             return render_template('doctor_login.html', error_code=error_code)
@@ -629,6 +646,8 @@ def login():
         cur = myconn.cursor()
         cur.execute('SELECT * FROM user WHERE UserId=%s AND UserPassword=%s', (userid, passwd))
         acc = cur.fetchone()
+        myconn.commit()
+        cur.close()
         if acc:
             session['loggedin'] = True
             session['UserId'] = userid
@@ -636,6 +655,13 @@ def login():
             session['Address'] = acc[3]
             session['Phone'] = acc[4]
             session['DOB'] = acc[5]
+            session['sender_id'] = userid
+            session['type'] = 'user'
+            cur = myconn.cursor()
+            cur.execute('SELECT * FROM doctor')
+            session['acc1'] = cur.fetchall()
+            myconn.commit()
+            cur.close()
             return render_template('user_index.html')
         else:
             return render_template('user_home.html',error_code=2)
@@ -840,6 +866,41 @@ def appointment_notifications():
     print(appointments)
     return render_template('appointment_notifications.html',appointments=appointments,status=status)
 
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    acc = []
+    if request.method == 'POST':
+        sender = session['sender_id']
+        receiver = session['receiver_id']
+        msg = request.form['msg']
+        cur = myconn.cursor()
+        cur.execute('INSERT INTO chat VALUES (CURTIME(), %s, %s, %s, CURDATE())', (sender, receiver, msg))
+        myconn.commit()
+        cur.close()
+
+        cur1 = myconn.cursor()
+        cur1.execute('SELECT * FROM chat WHERE (sender_id=%s AND receiver_id=%s) OR (sender_id=%s AND receiver_id=%s)', (sender, receiver, receiver, sender))
+        acc = cur1.fetchall()
+        myconn.commit()
+        cur1.close()
+
+
+    return render_template('chat_page.html', acc=acc)
+
+@app.route('/select', methods = ['GET','POST'])
+def select():
+    if request.method == 'POST':
+        session['receiver_id'] = request.form['select']
+        sender = session['sender_id']
+        receiver = session['receiver_id']
+
+        cur1 = myconn.cursor()
+        cur1.execute('SELECT * FROM chat WHERE (sender_id=%s AND receiver_id=%s) OR (sender_id=%s AND receiver_id=%s)', (sender, receiver, receiver, sender))
+        acc = cur1.fetchall()
+        myconn.commit()
+        cur1.close()
+        return render_template('chat_page.html', acc=acc)
+    return render_template('chat_page.html')
 
 
 
