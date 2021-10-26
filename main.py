@@ -691,7 +691,10 @@ def register():
         except:
             return render_template('user_home.html',error_code=2)
 
-    
+
+@app.route('/user_index', methods = ['GET', 'POST'])
+def user_index():
+     return render_template('user_index.html')
 
 @app.route('/user_update', methods = ['GET', 'POST'])
 def update():
