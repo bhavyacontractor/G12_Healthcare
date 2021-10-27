@@ -83,6 +83,25 @@
 <form action="{{ url_for('logout') }}">
     <button class="btn btn-primary" type="submit">Logout</button>
 </form></div>
+    
+    
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        Search hospital by facilities
+      </button>
+      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/search_oxygen">COVID-19 Oxygen Status</a></li>
+            <li><a class="dropdown-item" href="/search_surgery">Surgery and Emergency</a></li>
+            <li><a class="dropdown-item" href="/search_beds">COVID-19 Beds</a></li>
+            <li><a class="dropdown-item" href="/search_blood">Blood Donation</a></li>
+            <li><a class="dropdown-item" href="/search_ambulance">Ambulance Details</a></li>
+      </ul>
+    </div>
+
+
+
+<a href="/vaccine_book">vaccine</a>
+
 
 </body>
 </html>
