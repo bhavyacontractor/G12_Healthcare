@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccine Portal</title>
+</head>
+<body>
+    <h1>Add Slots</h1>
+    <form action="/add_vaccine_slot" method="post">
+        <span>Enter date</span> <br>
+        <input type="date" name="appt_date" id="" > <br>
+        <br>
+        <span>Input start time</span> <br>
+        <input type="time" name="start_time"> <br>
+        <br>
+        <span>Enter end time</span> <br>
+        <input type="time" name="end_time"> <br>
+        <br>
+        <span>Enter Dose</span> <br>
+        <input type="number" name="dose" id="" min="1" max="2"> <br>
+        <br>
+        <span>Enter vaccine available in this slot</span> <br>
+        <input type="checkbox" name="vaccine" id="" value="covaxin"><label for="vaccine">Covaxin</label> <br>
+        <input type="checkbox" name="vaccine" id="" value="covishield"><label for="vaccine">Covishield</label> <br>
+        <input type="checkbox" name="vaccine" id="" value="sputnik"><label for="vaccine">Sputnik</label> <br>
+        <br>
+        <span>Enter maximum persons allowed in this slot</span> <br>
+        <input type="number" name="total_persons" id="" min="0"> <br>
+        <br>
+        <input type="submit" value="Add slot">
+        {% if msg == "Added Sucessfully!!" or msg == "Slot is already present" %}
+            <span>{{ msg }}</span>
+        {% endif %}
+    </form>
+
+    <h1>List Of People Coming For Vaccination</h1>
+    <form action="/display_vaccine_bookings" method="post">
+        <span>Select the date</span> <br>
+        <input type="checkbox" name="day" id="" value="today"> Today <br>
+        <input type="checkbox" name="day" id="" value="tomorrow"> Tomorrow <br>
+        <input type="checkbox" name="day" id="" value="day_after_tomorrow"> Day After Tomorrow <br>
+        <br>
+        <input type="submit" value="See List"> <br>
+    </form>
+
+    {% for day in ls %}
+        {% set disp = days[ls.index(day)].split('_') %}
+        {% if day|length %}
+            <h2>{{ disp | join(' ') | upper }}</h2>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Time</th>
+                    <th>Dose</th>
+                    <th>Vaccine</th>
+                    <!-- <th></th> -->
+                </tr>
+
+                {% for entry in day %}
+                    <tr>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td>{{ entry[3] }} - {{ entry[4] }}</td>
+                        <td>{{ entry[6] }}</td>
+                        <td>{{ entry[7] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+        {% else %}
+            <h2>{{ disp | join(' ') | upper }}</h2>
+            <!-- <h2>{{ days[ls.index(day)] | upper }}</h2> -->
+            <span>No Bookings</span>
+            <br>
+        {% endif %}
+    {% endfor %}
+
+</body>
+</html>

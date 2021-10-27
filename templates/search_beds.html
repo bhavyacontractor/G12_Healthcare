@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <title>Beds</title>
+</head>
+<body>
+
+    <div class="container" my-3>
+    <form action="/search_beds" method="post">
+      <br>
+      <label class="form-label">Search by Hospital</label>
+      <div class="form-group" style="margin-bottom: 20px;">
+          <SELECT name="hosp_id" id="hosp_id" class="form-control">
+            {% for j in hospital %}
+                <OPTION value={{j[0]}}>{{j[1]}} ( {{j[2]}} )</OPTION>
+            {% endfor %}
+
+          </SELECT>
+          </p>
+      </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  {% if hospBedsDetails|length == 0 %}
+
+ {% else %}
+ <div class="container my-3">
+  <h2>Beds Status</h2> <br>
+
+
+    <div class="card">
+      <div class="card-body">
+          <h5 class="card-title">Number of beds avialable</h5>
+               {{ hospBedsDetails[0][1] }}
+  </div></div></div>
+  {% endif %}
+
+
+</div>
+
+</body>
+</html>

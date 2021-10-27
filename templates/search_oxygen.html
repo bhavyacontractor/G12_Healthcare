@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>Oxygen Details</title>
+  </head>
+  <body>
+
+  <div class="container" my-3>
+    <form action="/search_oxygen" method="post">
+      <br>
+      <label class="form-label">Search by Hospital</label>
+      <div class="form-group" style="margin-bottom: 20px;">
+          <SELECT name="hosp_id" id="hosp_id" class="form-control">
+            {% for j in hospital %}
+                <OPTION value={{j[0]}}>{{j[1]}} ( {{j[2]}} )</OPTION>
+            {% endfor %}
+
+          </SELECT>
+          </p>
+      </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+     {% if hospOxygenDetails|length == 0 %}
+
+     {% else %}
+
+
+
+     <table class="coursesTable" >
+      <thead class="thead">
+          <tr>
+              <th>Litres Available</th>
+              <th>Hourly Supply (Litres)</th>
+              <th>Price Per Litre</th>
+          </tr>
+      </thead>
+      <tbody class="tbody">
+          <tr>
+            <td>{{ hospOxygenDetails[0][1] }}</td>
+            <td>{{ hospOxygenDetails[0][2] }}</td>
+            <td>{{ hospOxygenDetails[0][3] }}</td>
+          </tr>
+       </tbody>
+  </table>
+
+
+
+
+     {% endif %}
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+  </body>
+
+</html>
