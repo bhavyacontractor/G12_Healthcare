@@ -1,6 +1,7 @@
 from re import A
 from flask import Flask, render_template, request, session
 import flask
+from datetime import datetime, timedelta
 from flask_mysqldb import MySQL
 import mysql.connector
 from flask_session import Session
@@ -905,6 +906,208 @@ def select():
         return render_template('chat_page.html', acc=acc)
     return render_template('chat_page.html')
 
+
+@app.route('/add_vaccine_slot', methods=['GET', 'POST'])
+def add_vaccine_slot():
+    days = []
+    ls = []
+    msg = ""
+    if request.method == 'POST':
+        cur  = myconn.cursor()
+        hosp_id = session['hosp_ID']
+        appt_date = request.form.get('appt_date')
+        dose = request.form.get('dose');
+        start_time = request.form.get('start_time')
+        end_time = request.form.get('end_time')
+        vaccine = request.form.getlist('vaccine')
+        total_persons = request.form.get('total_persons')
+        print(vaccine)
+        for vac in vaccine:
+            cur.execute('SELECT * FROM vaccine_slots WHERE hosp_id = %s AND start_time = %s AND end_time = %s AND appt_date = %s AND dose = %s AND vaccine_type = %s', (hosp_id, start_time, end_time, appt_date, dose, vac, ))
+            query_present = cur.fetchone()
+            if query_present!=None: 
+                msg = "Slot is already present"
+                return render_template('vaccine_portal.html', msg=msg, ls=ls, days=days)
+        for vac in vaccine:
+            cur.execute('INSERT INTO vaccine_slots(hosp_id, start_time, end_time, appt_date, dose, total_persons, vaccine_type) VALUES (%s, %s, %s, %s, %s, %s, %s)', (int(hosp_id), start_time, end_time, appt_date, int(dose), total_persons, vac, ))
+            myconn.commit()
+        msg = "Added Sucessfully!!"
+
+    return render_template('vaccine_portal.html', msg=msg, ls=ls, days=days)
+
+@app.route('/display_vaccine_bookings', methods=['GET', 'POST'])
+def display_vaccine_bookings():
+    days = []
+    ls = []
+    msg = ""
+    if(request.method == 'POST'):
+        cur = myconn.cursor()
+        days = request.form.getlist('day')
+        hosp_id = session['hosp_ID']
+        days_dict = {}
+        today = datetime.date.today()
+        tomorrow = today + timedelta(days=1)
+        day_after_tomorrow = tomorrow + timedelta(days=1)
+        today = today.strftime('%Y-%m-%d')
+        tomorrow = tomorrow.strftime('%Y-%m-%d')
+        day_after_tomorrow = day_after_tomorrow.strftime('%Y-%m-%d')
+        for t in days:
+            if(t=='today'):
+                days_dict[t] = today
+            elif(t=='tomorrow'):
+                days_dict[t] = tomorrow
+            else:
+                days_dict[t] = day_after_tomorrow
+        ls = []
+        for t in days:
+            query = '''
+                    SELECT vaccine_book.UserID, 
+                            user.UserName, 
+                            user.UserPhone, 
+                            vaccine_slots.start_time, 
+                            vaccine_slots.end_time, 
+                            vaccine_slots.appt_date, 
+                            vaccine_slots.dose, 
+                            vaccine_slots.vaccine_type
+                    FROM vaccine_book
+                    JOIN user 
+                        ON vaccine_book.UserID = user.UserID
+                    JOIN vaccine_slots
+                        ON vaccine_book.vaccine_time_id = vaccine_slots.vaccine_time_id
+                    WHERE vaccine_book.hosp_id = %s AND appt_date = %s'''
+
+            cur.execute(query, (hosp_id, days_dict[t], ))
+            res = cur.fetchall()
+            ls.append(res)
+
+    return render_template('vaccine_portal.html', msg=msg, ls=ls, days=days)
+
+@app.route('/search_blood', methods=['GET', 'POST'])
+def search_blood():
+    query = '''SELECT h.hosp_ID, h.hospName, h.hospAddress FROM blooddetails bd JOIN hospital h on bd.hosp_ID = h.hosp_ID'''
+    cur = myconn.cursor()
+    cur.execute(query)
+    hospital = cur.fetchall()
+    hospBloodDetails=''
+    if request.method == 'POST':
+        hosp_id=request.form['hosp_id']
+        query = "SELECT * FROM BloodDetails WHERE hosp_ID ='%s'" % (hosp_id)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospBloodDetails = cur.fetchall()
+        return render_template('search_blood.html', hospBloodDetails=hospBloodDetails,hospital=hospital)  # Pass all bed details
+    return render_template('search_blood.html',hospital=hospital,hospBloodDetails=hospBloodDetails)
+
+
+@app.route('/search_oxygen', methods=['GET', 'POST'])
+def search_oxygen():
+    print('oxy')
+    query = '''SELECT h.hosp_ID, h.hospName, h.hospAddress FROM oxygendetails bd JOIN hospital h on bd.hosp_ID = h.hosp_ID'''
+    cur = myconn.cursor()
+    cur.execute(query)
+    hospital = cur.fetchall()
+    hospOxygenDetails = ''
+    if request.method == 'POST':
+        hosp_id = request.form['hosp_id']
+        query = "SELECT * FROM oxygenDetails WHERE hosp_ID ='%s'" % (hosp_id)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospOxygenDetails = cur.fetchall()
+        return render_template('search_oxygen.html', hospOxygenDetails=hospOxygenDetails,hospital=hospital)  # Pass all oxygen details
+    return render_template('search_oxygen.html', hospital=hospital,hospOxygenDetails=hospOxygenDetails)
+
+
+@app.route('/search_beds', methods=['GET', 'POST'])
+def search_beds():
+    query = '''SELECT h.hosp_ID, h.hospName, h.hospAddress FROM bedsdetails bd JOIN hospital h on bd.hosp_ID = h.hosp_ID'''
+    cur = myconn.cursor()
+    cur.execute(query)
+    hospital = cur.fetchall()
+    hospBedsDetails = ''
+    if request.method == 'POST':
+        hosp_id = request.form['hosp_id']
+        query = "SELECT * FROM bedsDetails WHERE hosp_ID ='%s'" % (hosp_id)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospBedsDetails = cur.fetchall()
+        print(hospBedsDetails)
+        return render_template('search_beds.html', hospBedsDetails=hospBedsDetails,hospital=hospital)  # Pass all oxygen details
+    return render_template('search_beds.html', hospital=hospital,hospBedsDetails=hospBedsDetails)
+
+
+@app.route('/search_surgery', methods=['GET', 'POST'])
+def search_surgery():
+    query = '''SELECT h.hosp_ID, h.hospName, h.hospAddress FROM surgerydetails bd JOIN hospital h on bd.hosp_ID = h.hosp_ID'''
+    cur = myconn.cursor()
+    cur.execute(query)
+    hospital = cur.fetchall()
+    hospSurgeryDetails=''
+    if request.method == 'POST':
+        hosp_id=request.form['hosp_id']
+        query = "SELECT * FROM surgeryDetails WHERE hosp_ID ='%s'" % (hosp_id)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospSurgeryDetails = cur.fetchall()
+        return render_template('search_surgery.html', hospSurgeryDetails=hospSurgeryDetails,hospital=hospital)  # Pass all bed details
+    return render_template('search_surgery.html',hospital=hospital,hospSurgeryDetails=hospSurgeryDetails)
+
+@app.route('/search_ambulance', methods=['GET', 'POST'])
+def search_ambulance():
+    query = '''SELECT h.hosp_ID, h.hospName, h.hospAddress FROM ambulancedetails bd JOIN hospital h on bd.hosp_ID = h.hosp_ID'''
+    cur = myconn.cursor()
+    cur.execute(query)
+    hospital = cur.fetchall()
+    hospAmbulanceDetails = ''
+    if request.method == 'POST':
+        hosp_id = request.form['hosp_id']
+        query = "SELECT * FROM ambulancedetails WHERE hosp_ID ='%s'" % (hosp_id)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospAmbulanceDetails = cur.fetchall()
+        print(hospAmbulanceDetails[0][1])
+        return render_template('search_ambulance.html', hospAmbulanceDetails=hospAmbulanceDetails,hospital=hospital)  # Pass all oxygen details
+    return render_template('search_ambulance.html', hospital=hospital,hospAmbulanceDetails=hospAmbulanceDetails)
+
+
+
+@app.route('/vaccine_book', methods=['GET','POST'])
+def vaccine_book():
+    query = '''SELECT Distinct h.hosp_ID, h.hospName, h.hospAddress FROM vaccine_slots bd JOIN hospital h on bd.hosp_ID = h.hosp_ID'''
+    cur = myconn.cursor()
+    cur.execute(query)
+    hospital = cur.fetchall()
+    hospvaccineDetails = ''
+    if request.method == 'POST':
+        hosp_id = request.form['hosp_id']
+        dose=request.form['dose']
+        vaccine_type=request.form['type']
+        query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s'" % (hosp_id,dose,vaccine_type)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospvaccineDetails = cur.fetchall()
+        return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,
+                               hospital=hospital)  # Pass all bed details
+    return render_template('vaccine_book.html', hospital=hospital, hospvaccineDetails=hospvaccineDetails)
+
+@app.route('/book', methods=['GET','POST'])
+def book():
+    if request.method=='POST':
+        time_id=request.form['time_id']
+        query = "SELECT * FROM vaccine_slots WHERE vaccine_time_id='%s'" % (time_id)
+        cur = myconn.cursor()
+        cur.execute(query)
+        hospvaccinedetails=cur.fetchall()
+        cur.close()
+        print(hospvaccinedetails[0][0])
+        user=session['UserId']
+        print(user)
+        query = "INSERT INTO vaccine_book(UserID,vaccine_time_id,hosp_id,dose) VALUES ('%s',%s,%s,%s)" % (user,int(hospvaccinedetails[0][0]),int(hospvaccinedetails[0][1]),int(hospvaccinedetails[0][5]))
+        cur = myconn.cursor()
+        # INSERT INTO user(UserId, UserName, UserPassword) VALUES( % s, % s, % s)', (userid, name, passwd)
+        cur.execute(query)
+        myconn.commit()
+        return 'booked'
+    return 'Booked suceessfully'
 
 
 if __name__ == '__main__':
