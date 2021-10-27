@@ -121,6 +121,30 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   `chat_date` DATE NOT NULL,
   PRIMARY KEY (`chat_time`, `sender_id`, `receiver_id`, `chat_date`));
   
+  CREATE TABLE IF NOT EXISTS vaccine_slots (
+    `vaccine_time_id` int,
+    `hosp_id` int,
+    `start_time` time,
+    `end_time` time,
+    `appt_date` date,
+    `dose` int,
+    `total_persons` int,
+    `vaccine_type` varchar(100),
+    PRIMARY KEY (`vaccine_time_id`),
+    FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`) 
+);
+
+CREATE TABLE IF NOT EXISTS vaccine_book (
+    `UserID` int,
+    `vaccine_time_id` int,
+    `hosp_id` int,
+    `dose` int,
+    PRIMARY KEY (`dose`, `UserID`),
+    FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`),
+    FOREIGN KEY (`vaccine_time_id`) REFERENCES vaccine_slots(`vaccine_time_id`),
+    FOREIGN KEY (`UserID`) REFERENCES User(`UserID`)
+);
+  
   
   
   
