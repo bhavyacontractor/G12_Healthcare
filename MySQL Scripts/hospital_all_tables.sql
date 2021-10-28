@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   PRIMARY KEY (`chat_time`, `sender_id`, `receiver_id`, `chat_date`));
   
   CREATE TABLE IF NOT EXISTS vaccine_slots (
-    `vaccine_time_id` int,
+    `vaccine_time_id` int auto_increment,
     `hosp_id` int,
     `start_time` time,
     `end_time` time,

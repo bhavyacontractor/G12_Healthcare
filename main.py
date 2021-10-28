@@ -773,7 +773,7 @@ def show_appointments():
     dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
 
 
-    return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details)
+    return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details,error_code=-1)
 
 #Acceptance_Status = 0 ... Request has been sent and is pending
 #Acceptance Status = 1 ... Request has been accepted
@@ -789,20 +789,22 @@ def request_appointment(Time_ID):
     cur = myconn.cursor()
     cur.execute(query)
     Doc_ID = (cur.fetchone())[0]
-    query ='''INSERT INTO appointment (UserID,Time_ID,doc_ID,MeetLink,PreDescription,PostDescription,Acceptance_Status)
-    VALUES (%s, %s, '%s','%s','%s','%s',%s)
-    ''' % (UserID,Time_ID,Doc_ID,'www.googlemeet.com','Hello','',0)
-
-    cur.execute(query)
-    myconn.commit()
-
-    print(UserID,Time_ID,Doc_ID)
-
-    return render_template('show_appointments.html',today_details='',tomorrow_details='',dafter_details='')
+    try:
+        query ='''INSERT INTO appointment (UserID,Time_ID,doc_ID,MeetLink,PreDescription,PostDescription,Acceptance_Status)
+        VALUES (%s, %s, '%s','%s','%s','%s',%s)
+         ''' % (UserID,Time_ID,Doc_ID,'www.googlemeet.com','Hello','',0)
+        cur.execute(query)
+        myconn.commit()
+        error_code=0
+    except:
+        error_code = 1
+    
+    return render_template('show_appointments.html',today_details='',tomorrow_details='',dafter_details='',error_code=error_code)
 
 @app.route('/view_appointments',methods = ['GET', 'POST']) #On Doctor's Side
 def view_appointments():
     Doc_ID = session['doc_ID']
+    today = (datetime.datetime.today()).strftime("%Y-%m-%d")
     query = '''
         SELECT apt.UserID,apt.doc_ID,apt.MeetLink,apt.PreDescription,apt.PostDescription,apt.Acceptance_Status,
                tslots.Start_Time,tslots.End_Time,tslots.Appt_Date,
@@ -812,7 +814,8 @@ def view_appointments():
         JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
         JOIN user user on apt.UserID = user.UserID
         WHERE apt.doc_ID='%s' AND (apt.Acceptance_Status=%s OR apt.Acceptance_Status=%s)
-        ORDER BY tslots.Appt_Date ASC''' %(Doc_ID,0,1)
+        and tslots.Appt_Date >= '%s'
+        ORDER BY tslots.Appt_Date ASC''' %(Doc_ID,0,1,today)
 
     #Acceptance_Status = 0 ... Request has been sent and is pending
     #Acceptance Status = 1 ... Request has been accepted
@@ -846,6 +849,7 @@ def appointment_action(Time_ID,UserID,action):
 @app.route('/appointment_notifications',methods = ['GET', 'POST']) #On User's Side
 def appointment_notifications():
     UserID = session['UserId']
+    today = (datetime.datetime.today()).strftime("%Y-%m-%d")
     query = '''
         SELECT apt.UserID,apt.doc_ID,apt.MeetLink,apt.PreDescription,apt.PostDescription,apt.Acceptance_Status,
                tslots.Start_Time,tslots.End_Time,tslots.Appt_Date,
@@ -854,8 +858,8 @@ def appointment_notifications():
         FROM appointment apt 
         JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
         JOIN user user on apt.UserID = user.UserID
-        WHERE apt.UserID='%s'
-        ORDER BY tslots.Appt_Date ASC''' %(UserID)
+        WHERE apt.UserID='%s' and tslots.Appt_Date >= '%s'
+        ORDER BY tslots.Appt_Date ASC''' %(UserID,today)
 
     #Acceptance_Status = 0 ... Request has been sent and is pending
     #Acceptance Status = 1 ... Request has been accepted
@@ -916,7 +920,7 @@ def add_vaccine_slot():
         cur  = myconn.cursor()
         hosp_id = session['hosp_ID']
         appt_date = request.form.get('appt_date')
-        dose = request.form.get('dose');
+        dose = request.form.get('dose')
         start_time = request.form.get('start_time')
         end_time = request.form.get('end_time')
         vaccine = request.form.getlist('vaccine')

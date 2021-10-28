@@ -39,6 +39,26 @@
         </ul>
     </div>
   </nav>
+
+  {% if error_code==0 %}
+  <div class="message">
+    <div class="message">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> Appointment Request Made Successfully! Please check Appointment Notifications to view Appointment status
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+    
+    {% elif error_code==1%}
+    <div class="message">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> You have already requested for this appointment...Please wait for the doctor to respond
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+
+    {% endif %}
     
     <br>
     <form action="/show_appointments" method="post" style="margin-left: 20px;">
