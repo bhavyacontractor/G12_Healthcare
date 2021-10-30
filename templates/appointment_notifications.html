@@ -47,6 +47,14 @@
                         <li><strong>PostDescription: </strong> {{ appointment[4] }}</li>
                     </ul>
                     <br>
+
+                    {% if appointment[5] == 2 or appointment[5] == 3 %}
+                        <form action="/appointment_action/{{ appointment[11] }}/{{ appointment[0] }}/Dismiss" style="display: inline-block; margin: 5px 5px 5px 5px;">
+                            <button type="submit" class="btn btn-primary">Dismiss</button>
+                        </form>
+                    {% endif %}
+
+
                 </div>
             {% endfor %}
         </div>

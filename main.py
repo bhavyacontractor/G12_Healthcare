@@ -26,6 +26,10 @@ myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
+    try:
+        session.clear()
+    except:
+        print("Session Not Started")
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
 @app.route("/analyze", methods=['GET', 'POST'])
@@ -728,51 +732,30 @@ def show_appointments():
     today_details = tomorrow_details = dafter_details=[]
     if request.method=='POST':
         appointmentSettings = request.form
+        doc_ID = appointmentSettings['doc_ID']
+        session['appointment_search_docID'] = doc_ID
         today = (datetime.datetime.today()).strftime("%Y-%m-%d")
         tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
         dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
-        print(today)
-        print(tomorrow)
-        print(dayafter)
-        doc_ID = appointmentSettings['doc_ID']
-        
-        try:
-            var1 = appointmentSettings['today']
-            query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,today,1)
-            cur = myconn.cursor()
-            cur.execute(query)
-            today_details = cur.fetchall()
-            myconn.commit()
-        except:
-            print("NoToday")
-        try:
-            var2 = appointmentSettings['tomorrow']
-            query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,tomorrow,1)
-            cur = myconn.cursor()
-            cur.execute(query)
-            tomorrow_details = cur.fetchall()
-            myconn.commit()
-        except:
-            print("No Tomorrow")
-        try:
-            var3 = appointmentSettings['dayafter']
-            query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,dayafter,1)
-            cur = myconn.cursor()
-            cur.execute(query)
-            dafter_details = cur.fetchall()
-            myconn.commit()
-        except:
-            print("No Day After")
-        
-        print(today_details)
-        print(tomorrow_details)
-        print(dafter_details)
 
-    today = (datetime.datetime.today()).strftime("%Y-%m-%d")
-    tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-    dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
+        query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,today,1)
+        cur = myconn.cursor()
+        cur.execute(query)
+        today_details = cur.fetchall()
+        myconn.commit()
 
+        query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,tomorrow,1)
+        cur = myconn.cursor()
+        cur.execute(query)
+        tomorrow_details = cur.fetchall()
+        myconn.commit()
 
+        query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,dayafter,1)
+        cur = myconn.cursor()
+        cur.execute(query)
+        dafter_details = cur.fetchall()
+        myconn.commit()
+    
     return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details,error_code=-1)
 
 #Acceptance_Status = 0 ... Request has been sent and is pending
@@ -799,7 +782,30 @@ def request_appointment(Time_ID):
     except:
         error_code = 1
     
-    return render_template('show_appointments.html',today_details='',tomorrow_details='',dafter_details='',error_code=error_code)
+    doc_ID = session['appointment_search_docID'] 
+    today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+    tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
+
+    query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,today,1)
+    cur = myconn.cursor()
+    cur.execute(query)
+    today_details = cur.fetchall()
+    myconn.commit()
+
+    query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,tomorrow,1)
+    cur = myconn.cursor()
+    cur.execute(query)
+    tomorrow_details = cur.fetchall()
+    myconn.commit()
+
+    query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,dayafter,1)
+    cur = myconn.cursor()
+    cur.execute(query)
+    dafter_details = cur.fetchall()
+    myconn.commit()
+    
+    return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details,error_code=error_code)
 
 @app.route('/view_appointments',methods = ['GET', 'POST']) #On Doctor's Side
 def view_appointments():
@@ -830,22 +836,6 @@ def view_appointments():
     print(appointments)
     return render_template('view_appointments.html',appointments=appointments,status=status)
 
-@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST']) #On Doctor's Side
-def appointment_action(Time_ID,UserID,action):
-    print(Time_ID,UserID,action)
-    if action=='Accept':
-        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(1,Time_ID,UserID)
-    elif action=='Reject':
-        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(2,Time_ID,UserID)
-    elif action=='Cancel':
-        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(3,Time_ID,UserID)
-    
-    cur = myconn.cursor()
-    cur.execute(query)
-    myconn.commit()
-    
-    return redirect('/view_appointments')
-
 @app.route('/appointment_notifications',methods = ['GET', 'POST']) #On User's Side
 def appointment_notifications():
     UserID = session['UserId']
@@ -873,6 +863,65 @@ def appointment_notifications():
     appointments = cur.fetchall()
     print(appointments)
     return render_template('appointment_notifications.html',appointments=appointments,status=status)
+
+
+@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST']) #On Doctor's Side
+def appointment_action(Time_ID,UserID,action):
+    print(Time_ID,UserID,action)
+    if action=='Accept':
+        query = '''UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s'''%(1,Time_ID,UserID) 
+    elif action=='Reject':
+        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(2,Time_ID,UserID)
+    elif action=='Cancel':
+        query = "UPDATE appointment SET Acceptance_Status=%s WHERE Time_ID=%s AND UserID=%s"%(3,Time_ID,UserID)
+    elif action=='Dismiss':
+        query = "DELETE FROM appointment WHERE Time_ID=%s AND UserID=%s"%(Time_ID,UserID)
+        cur = myconn.cursor()
+        cur.execute(query)
+        myconn.commit()
+        cur.close()
+        return redirect('/appointment_notifications')
+    
+    cur = myconn.cursor()
+    cur.execute(query)
+    myconn.commit()
+    cur.close()
+
+    make_available = "UPDATE TimeSlots SET Availability=%s WHERE Time_ID=%s"%(1,Time_ID)
+    cur = myconn.cursor()
+    cur.execute(make_available)
+    myconn.commit()
+    cur.close()
+
+    change_availability = '''UPDATE TimeSlots SET Availability=%s
+    WHERE EXISTS (SELECT * FROM appointment WHERE Time_ID=%s AND Acceptance_Status=%s)
+    AND Time_ID = %s'''%(0,Time_ID,1,Time_ID)
+    cur = myconn.cursor()
+    cur.execute(change_availability)
+    myconn.commit()
+    cur.close()
+
+    status1 = "SELECT * FROM appointment WHERE Time_ID=%s AND Acceptance_Status=%s"%(Time_ID,1)
+    
+    cur=myconn.cursor()
+    cur.execute(status1)
+    confirmed = cur.fetchall()
+    i = 0
+    for row in confirmed:
+        i = i + 1
+
+    if i>0:
+        change_status = '''UPDATE appointment SET Acceptance_Status = %s
+        WHERE Acceptance_Status = %s
+        AND Time_ID=%s'''%(2,0,Time_ID)
+        cur = myconn.cursor()
+        cur.execute(change_status)
+        myconn.commit()
+        cur.close()
+    
+    return redirect('/view_appointments')
+
+
 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
