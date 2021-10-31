@@ -865,7 +865,7 @@ def appointment_notifications():
     return render_template('appointment_notifications.html',appointments=appointments,status=status)
 
 
-@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST']) #On Doctor's Side
+@app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST']) 
 def appointment_action(Time_ID,UserID,action):
     print(Time_ID,UserID,action)
     if action=='Accept':
