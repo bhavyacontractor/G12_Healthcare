@@ -1162,6 +1162,29 @@ def book():
         return 'booked'
     return 'Booked suceessfully'
 
+@app.route('/search_doctors/<string:speciality>', methods = ['GET','POST'])
+def search_doctors(speciality):
+    session['srch_doc_speciality'] = speciality
+    
+    specialities = ['Physician','Dentist','Obstetrician','Opthalmologist','Cardiologist','Psychiatrist','Homeopath','Ayurveda']   
+    
+    if session['srch_doc_speciality'] == 'none':
+        return render_template('search_doctors.html',check=False,specialities=specialities)
+    else:
+        doc_s = session['srch_doc_speciality']
+        cur = myconn.cursor()
+        cur.execute("SELECT * FROM doctor WHERE doc_s='%s' "%(doc_s))
+        srch_doctors = cur.fetchall()
+        myconn.commit()
+        cur.close()
+        
+        return render_template('search_doctors.html', check=True,srch_doctors=srch_doctors,specialities=specialities,doc_s=doc_s)
+        
+
+
+
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
