@@ -39,12 +39,21 @@
 
 
     {% if check!=True %}
-        Please Select a Department
+        Please Select a Speciality
 
     {% else %}
 
         <h3>You have selected {{ doc_s }}</h3>
+        
+        <br>
+        <ul>
+            {% for doctor in srch_doctors  %}
+                <li><a href="/chat_with/{{doctor[0]}}"> Chat {{doctor[0]}}</a></li>
+                <li><a href="/show_appointments/{{doctor[0]}}"> Appointment {{doctor[0]}}</a></li>
+             {% endfor %}
 
+        </ul>
+        
     {% endif %}
         
 </body>

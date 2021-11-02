@@ -553,10 +553,13 @@ def doctor_login():
             docAllDetails = cur.fetchall()
             myconn.commit()
             cur.close()
-
+            
+            query = '''SELECT UserID FROM User where UserID IN
+            (SELECT Sender_ID FROM Chat WHERE Receiver_ID ='%s')
+            '''%(session["doc_ID"])
             cur = myconn.cursor()
-            cur.execute('SELECT * FROM user')
-            session['acc1'] = cur.fetchall()
+            cur.execute(query)
+            session["user_senders"] = cur.fetchall()
             myconn.commit()
             cur.close()
 
@@ -662,11 +665,6 @@ def login():
             session['DOB'] = acc[5]
             session['sender_id'] = userid
             session['type'] = 'user'
-            cur = myconn.cursor()
-            cur.execute('SELECT * FROM doctor')
-            session['acc1'] = cur.fetchall()
-            myconn.commit()
-            cur.close()
             return render_template('user_index.html')
         else:
             return render_template('user_home.html',error_code=2)
@@ -727,34 +725,31 @@ def logout():
     session.pop('DOB', None)
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
-@app.route('/show_appointments',methods = ['GET', 'POST']) #On User's Side
-def show_appointments():
+@app.route('/show_appointments/<string:doc_ID>',methods = ['GET', 'POST']) #On User's Side
+def show_appointments(doc_ID):
     today_details = tomorrow_details = dafter_details=[]
-    if request.method=='POST':
-        appointmentSettings = request.form
-        doc_ID = appointmentSettings['doc_ID']
-        session['appointment_search_docID'] = doc_ID
-        today = (datetime.datetime.today()).strftime("%Y-%m-%d")
-        tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-        dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
+    session['appointment_search_docID'] = doc_ID
+    today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+    tomorrow = (datetime.datetime.today()+datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    dayafter = (datetime.datetime.today()+datetime.timedelta(days=2)).strftime("%Y-%m-%d")
 
-        query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,today,1)
-        cur = myconn.cursor()
-        cur.execute(query)
-        today_details = cur.fetchall()
-        myconn.commit()
+    query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,today,1)
+    cur = myconn.cursor()
+    cur.execute(query)
+    today_details = cur.fetchall()
+    myconn.commit()
 
-        query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,tomorrow,1)
-        cur = myconn.cursor()
-        cur.execute(query)
-        tomorrow_details = cur.fetchall()
-        myconn.commit()
+    query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,tomorrow,1)
+    cur = myconn.cursor()
+    cur.execute(query)
+    tomorrow_details = cur.fetchall()
+    myconn.commit()
 
-        query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,dayafter,1)
-        cur = myconn.cursor()
-        cur.execute(query)
-        dafter_details = cur.fetchall()
-        myconn.commit()
+    query = "SELECT * FROM TimeSlots WHERE doc_ID='%s' and Appt_Date='%s' and Availability=%s"%(doc_ID,dayafter,1)
+    cur = myconn.cursor()
+    cur.execute(query)
+    dafter_details = cur.fetchall()
+    myconn.commit()
     
     return render_template('show_appointments.html',today_details=today_details,tomorrow_details=tomorrow_details,dafter_details=dafter_details,error_code=-1)
 
@@ -942,22 +937,40 @@ def chat():
         cur1.close()
 
 
-    return render_template('chat_page.html', acc=acc)
+    return render_template('chat_page.html', acc=acc,user_type=session['type'])
 
-@app.route('/select', methods = ['GET','POST'])
-def select():
+@app.route('/chat_with/<string:receiver_id>', methods = ['GET','POST'])
+def chat_with(receiver_id):
+    print(receiver_id)
+    if receiver_id!='doctorid':
+        session['receiver_id'] = receiver_id
+        sender = session['sender_id']
+        receiver = session['receiver_id']
+        print(sender,receiver)
+
+        cur1 = myconn.cursor()
+        cur1.execute("SELECT * FROM chat WHERE (sender_id='%s' AND receiver_id='%s') OR (sender_id='%s' AND receiver_id='%s')"%(sender, receiver, receiver, sender))
+        acc = cur1.fetchall()
+        print(acc)
+        myconn.commit()
+        cur1.close()
+        return render_template('chat_page.html', acc=acc,user_type=session['type'])
+
+    
+
     if request.method == 'POST':
         session['receiver_id'] = request.form['select']
         sender = session['sender_id']
         receiver = session['receiver_id']
 
         cur1 = myconn.cursor()
-        cur1.execute('SELECT * FROM chat WHERE (sender_id=%s AND receiver_id=%s) OR (sender_id=%s AND receiver_id=%s)', (sender, receiver, receiver, sender))
+        cur1.execute("SELECT * FROM chat WHERE (sender_id='%s' AND receiver_id='%s') OR (sender_id='%s' AND receiver_id='%s')"%(sender, receiver, receiver, sender))
         acc = cur1.fetchall()
         myconn.commit()
         cur1.close()
-        return render_template('chat_page.html', acc=acc)
-    return render_template('chat_page.html')
+        return render_template('chat_page.html', acc=acc,user_type=session['type'])
+
+    return render_template('chat_page.html',user_type=session['type'])
 
 
 @app.route('/add_vaccine_slot', methods=['GET', 'POST'])
@@ -1177,7 +1190,7 @@ def search_doctors(speciality):
         srch_doctors = cur.fetchall()
         myconn.commit()
         cur.close()
-        
+        print(srch_doctors)
         return render_template('search_doctors.html', check=True,srch_doctors=srch_doctors,specialities=specialities,doc_s=doc_s)
         
 
