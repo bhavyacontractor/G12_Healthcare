@@ -4,7 +4,10 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
   `hospEmail` varchar(255),
   `hospPhone` INT,
   `hospAddress` varchar(255),
+  `hosp_city` varchar(100),
+   `hosp_state` varchar(100),
   `hospPassword` varchar(255),
+`hosp_description` varchar(300),
   PRIMARY KEY (`hosp_id`));
   
   CREATE TABLE IF NOT EXISTS `VaccineDetails` (
