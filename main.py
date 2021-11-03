@@ -1144,7 +1144,7 @@ def vaccine_book(hosp_id):
     if request.method == 'POST':
         dose = request.form['dose']
         vaccine_type = request.form['type']
-        query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>'%s'" % (session['help_hosp_id'], dose, vaccine_type,datetime.date.today())
+        query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>'%s'" % (hosp_id, dose, vaccine_type,datetime.date.today())
         cur = myconn.cursor()
         cur.execute(query)
         hospvaccineDetails = cur.fetchall()
