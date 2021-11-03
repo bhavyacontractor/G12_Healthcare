@@ -14,23 +14,6 @@
 </head>
 <body>
 
-    <div class="container" my-3>
-    <form action="/search_beds" method="post">
-      <br>
-      <label class="form-label">Search by Hospital</label>
-      <div class="form-group" style="margin-bottom: 20px;">
-          <SELECT name="hosp_id" id="hosp_id" class="form-control">
-            {% for j in hospital %}
-                <OPTION value={{j[0]}}>{{j[1]}} ( {{j[2]}} )</OPTION>
-            {% endfor %}
-
-          </SELECT>
-          </p>
-      </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
-
   {% if hospBedsDetails|length == 0 %}
 
  {% else %}
