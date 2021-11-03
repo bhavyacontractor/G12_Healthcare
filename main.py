@@ -21,8 +21,9 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 # myconn = mysql.connector.connect(host="localhost", user="root", passwd="@Bhakauhet92", database="healthcare",
 #                                  buffered=True)
 
-myconn = mysql.connector.connect(host="localhost", user="root", passwd="amit@186", database="healthcare_portal", buffered=True)
+# myconn = mysql.connector.connect(host="localhost", user="root", passwd="amit@186", database="healthcare_portal", buffered=True)
 
+myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200001044mysql",database="healthcare_portal", auth_plugin="200001044mysql",buffered=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
