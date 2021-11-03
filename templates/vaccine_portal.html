@@ -47,7 +47,8 @@
 
     {% for day in ls %}
         {% set disp = days[ls.index(day)].split('_') %}
-        {% if day|length %}
+        {% set bo = day=="today" or day=="tomorrow" or day=="day_after_tomorrow" %}
+        {% if day|length and bo!=True %}
             <h2>{{ disp | join(' ') | upper }}</h2>
             <table>
                 <tr>
