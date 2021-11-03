@@ -1,0 +1,33 @@
+.card {
+    display: inline-flex;
+    flex-direction: row;
+    width: 90%;
+    margin: 1% 5% 1% 5%;
+    padding: 10px;
+    justify-content: left;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 0 0 5px lightgray;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.description p{
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+
+
+img{
+    width: 220px;
+    height: 200px;
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
