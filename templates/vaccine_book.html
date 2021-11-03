@@ -17,17 +17,9 @@
 
 
   <div class="container" my-3>
-    <form action="/vaccine_book" method="post">
+    <form action="/vaccine_book/{{hosp_id}}" method="post">
       <br>
-      <label class="form-label">Search by Hospital</label>
-      <div class="form-group" style="margin-bottom: 20px;">
-          <SELECT name="hosp_id" id="hosp_id" class="form-control">
-            {% for j in hospital %}
-                <OPTION value={{j[0]}}>{{j[1]}} ( {{j[2]}} )</OPTION>
-            {% endfor %}
 
-          </SELECT>
-          <br>
           <label class="form-label">Select Dose</label>
           <SELECT name="dose" id="dose" class="form-control">
                 <OPTION value=1>1</OPTION>
@@ -43,15 +35,15 @@
 
           </SELECT>
           </p>
-      </div>
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
   </div>
 
 
-{% if hospvaccineDetails|length == 0 %}
+{% if hospvaccineDetails|length != 0 %}
 
-    {% else %}
+
 
 
   <div class="container my-3">
