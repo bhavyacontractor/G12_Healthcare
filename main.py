@@ -753,6 +753,22 @@ def logout():
     session.pop('DOB', None)
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
+@app.route('/addTimeSlot', methods=['GET', 'POST']) 
+def addTimeSlot():
+    doc_ID = session["doc_ID"]
+    if request.method == 'POST':
+        startTime = request.form['startTime']
+        endTime = request.form['endTime']
+        date = request.form['date']
+        query = "INSERT INTO timeslots (Doc_ID,Start_Time,End_Time,Appt_Date,Availability) VALUES ('%s','%s','%s','%s',%s)"%(doc_ID,startTime,endTime,date,1)
+        cur = myconn.cursor()
+        cur.execute(query)
+        myconn.commit()
+        cur.close()
+        print("Add Time Slot")
+
+    return render_template('add_time_slot.html')
+
 
 @app.route('/show_appointments/<string:doc_ID>', methods=['GET', 'POST'])  # On User's Side
 def show_appointments(doc_ID):
