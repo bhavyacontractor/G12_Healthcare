@@ -63,110 +63,126 @@
     <br>
     <br>
 
+    <div class="container">
+      <h2>Add Pre-Description for the Appointment</h2>
+      <form action="/show_appointments/{{session.appointment_search_docID}}" method="POST">
+          <div class="mb-3">
+            <textarea type="text" class="form-control" id="preDesc" name="preDesc" row="4"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </div>
+
+    <br>
+    <br>
+
+
   
+    <div style="margin-left: 20px;">
+      <h2 style="display: inline-block;">Current Pre-Description:</h2> <h3 style="display: inline-block;"><em>{{ session.preDesc }}</em></h3>
+      <br><br>
+      <h3>Today's Available Appointments</h3>
+      {% if today_details|length==0 %}
+        <br>
+        <h5>No Appointments Available</h5>
+      {% else %}
 
-    <h3>Today's Available Appointments</h3>
-    {% if today_details|length==0 %}
+        <table class="coursesTable" >
+          <thead class="thead">
+              <tr>
+                  <th>S No</th>
+                  <th>Time_ID</th>
+                  <th>Doctor_ID</th>
+                  <th>Start_Time</th>
+                  <th>End_Time</th>
+                  <th>Date</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+        
+          <tbody class="tbody">
+              {% for row in today_details %}
+                  <tr>
+                      <td>{{ loop.index }}</td>
+                      {% for detail in row[:5] %}
+                          <td>{{detail}}</td>
+                      {% endfor %} 
+                      <td><button type="button" class="btn btn-primary" ><a href="/request_appointment/{{ row.0 }}" style="color: aliceblue;">Request</a></button></td>    
+                  </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+
+      {% endif %}
+
       <br>
-      <h5>No Appointments Available</h5>
-    {% else %}
 
-      <table class="coursesTable" >
-        <thead class="thead">
-            <tr>
-                <th>S No</th>
-                <th>Time_ID</th>
-                <th>Doctor_ID</th>
-                <th>Start_Time</th>
-                <th>End_Time</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-      
-        <tbody class="tbody">
-            {% for row in today_details %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    {% for detail in row[:5] %}
-                        <td>{{detail}}</td>
-                    {% endfor %} 
-                    <td><button type="button" class="btn btn-primary" ><a href="/request_appointment/{{ row.0 }}" style="color: aliceblue;">Request</a></button></td>    
-                </tr>
-            {% endfor %}
-        </tbody>
-      </table>
+      <h3>Tomorrow's Available Appointments</h3>
+      {% if tomorrow_details|length==0 %}
+        <br>
+        <h5>No Appointments Available</h5>
+      {% else %}
+        <table class="coursesTable" >
+          <thead class="thead">
+              <tr>
+                  <th>S No</th>
+                  <th>Time_ID</th>
+                  <th>Doctor_ID</th>
+                  <th>Start_Time</th>
+                  <th>End_Time</th>
+                  <th>Date</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+        
+          <tbody class="tbody">
+              {% for row in tomorrow_details%}
+                  <tr>
+                      <td>{{ loop.index }}</td>
+                      {% for detail in row[:5] %}
+                          <td>{{detail}}</td>
+                      {% endfor %}     
+                      <td><button type="button" class="btn btn-primary" ><a href="/request_appointment/{{ row.0 }}" style="color: aliceblue;">Request</a></button></td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
 
-    {% endif %}
-
-    <br>
-
-    <h3>Tomorrow's Available Appointments</h3>
-    {% if tomorrow_details|length==0 %}
       <br>
-      <h5>No Appointments Available</h5>
-    {% else %}
-      <table class="coursesTable" >
-        <thead class="thead">
-            <tr>
-                <th>S No</th>
-                <th>Time_ID</th>
-                <th>Doctor_ID</th>
-                <th>Start_Time</th>
-                <th>End_Time</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-      
-        <tbody class="tbody">
-            {% for row in tomorrow_details%}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    {% for detail in row[:5] %}
-                        <td>{{detail}}</td>
-                    {% endfor %}     
-                    <td><button type="button" class="btn btn-primary" ><a href="/request_appointment/{{ row.0 }}" style="color: aliceblue;">Request</a></button></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-    {% endif %}
 
-    <br>
-
-    <h3>Day After Tomorrow's Available Appointments</h3>
-    {% if dafter_details|length==0 %}
+      <h3>Day After Tomorrow's Available Appointments</h3>
+      {% if dafter_details|length==0 %}
+        <br>
+        <h5>No Appointments Available</h5>
+      {% else %}
+        <table class="coursesTable" >
+          <thead class="thead">
+              <tr>
+                  <th>S No</th>
+                  <th>Time_ID</th>
+                  <th>Doctor_ID</th>
+                  <th>Start_Time</th>
+                  <th>End_Time</th>
+                  <th>Date</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+        
+          <tbody class="tbody">
+              {% for row in dafter_details %}
+                  <tr>
+                      <td>{{ loop.index }}</td>
+                      {% for detail in row[:5] %}
+                          <td>{{detail}}</td>
+                      {% endfor %}     
+                      <td><button type="button" class="btn btn-primary" ><a href="/request_appointment/{{ row.0 }}" style="color: aliceblue;">Request</a></button></td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
       <br>
-      <h5>No Appointments Available</h5>
-    {% else %}
-      <table class="coursesTable" >
-        <thead class="thead">
-            <tr>
-                <th>S No</th>
-                <th>Time_ID</th>
-                <th>Doctor_ID</th>
-                <th>Start_Time</th>
-                <th>End_Time</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-      
-        <tbody class="tbody">
-            {% for row in dafter_details %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    {% for detail in row[:5] %}
-                        <td>{{detail}}</td>
-                    {% endfor %}     
-                    <td><button type="button" class="btn btn-primary" ><a href="/request_appointment/{{ row.0 }}" style="color: aliceblue;">Request</a></button></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-    {% endif %}
-    <br>
-
+  </div>
 </body>
 </html>

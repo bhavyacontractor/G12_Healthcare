@@ -772,6 +772,9 @@ def addTimeSlot():
 
 @app.route('/show_appointments/<string:doc_ID>', methods=['GET', 'POST'])  # On User's Side
 def show_appointments(doc_ID):
+    if request.method == 'POST':
+        session["preDesc"]= request.form['preDesc']
+
     today_details = tomorrow_details = dafter_details = []
     session['appointment_search_docID'] = doc_ID
     today = (datetime.datetime.today()).strftime("%Y-%m-%d")
@@ -799,11 +802,13 @@ def show_appointments(doc_ID):
     return render_template('show_appointments.html', today_details=today_details, tomorrow_details=tomorrow_details,
                            dafter_details=dafter_details, error_code=-1)
 
-
+    
 # Acceptance_Status = 0 ... Request has been sent and is pending
 # Acceptance Status = 1 ... Request has been accepted
 # Acceptance Status = 2 ... Request has been declined
 # Acceptance Status = 3 ... Request has been cancelled
+
+
 
 
 @app.route('/request_appointment/<int:Time_ID>', methods=['GET', 'POST'])  # On User's Side
@@ -817,7 +822,7 @@ def request_appointment(Time_ID):
     try:
         query = '''INSERT INTO appointment (UserID,Time_ID,doc_ID,MeetLink,PreDescription,PostDescription,Acceptance_Status)
         VALUES (%s, %s, '%s','%s','%s','%s',%s)
-         ''' % (UserID, Time_ID, Doc_ID, 'www.googlemeet.com', 'Hello', '', 0)
+         ''' % (UserID, Time_ID, Doc_ID, 'www.googlemeet.com', session['preDesc'], '', 0)
         cur.execute(query)
         myconn.commit()
         error_code = 0
@@ -1194,6 +1199,7 @@ def book():
 @app.route('/search_doctors/<string:speciality>', methods=['GET', 'POST'])
 def search_doctors(speciality):
     session['srch_doc_speciality'] = speciality
+    session["preDesc"]="None"
 
     specialities = ['Physician', 'Dentist', 'Obstetrician', 'Opthalmologist', 'Cardiologist', 'Psychiatrist',
                     'Homeopath', 'Ayurveda']
