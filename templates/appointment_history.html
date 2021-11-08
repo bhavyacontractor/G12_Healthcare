@@ -11,26 +11,38 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-        <a class="navbar-brand" href="#">Appointment Notifications</a>
+        <a class="navbar-brand" href="#">Appointment History</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/user_index">UserHome<span class="sr-only"></span></a>
-                </li>
-            </ul>
+
+        {% if user_type=='doctor' %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/doctor_after_login">Doctor Home<span class="sr-only"></span></a>
+                    </li>
+                </ul>
+            </div>
             
-        </div>
+        {% else %}
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/user_index">UserHome<span class="sr-only"></span></a>
+                    </li>
+                </ul>
+            </div>
+            
+        {% endif %}
     </nav>
 
       <br>
     <div class="container">
         <div class="list-group">
-            {% for appointment in appointments %}
+            {% for appointment in pastAppointments %}
                 <div class="list-group-item list-group-item-action">
 
                     <div class="d-flex w-100 justify-content-between">
@@ -44,17 +56,19 @@
                         <li><strong>MeetLink: </strong> {{ appointment[2] }}</li>
                         <li><strong>Start Time : </strong> {{ appointment[6] }}</li>
                         <li><strong>End Time : </strong> {{ appointment[7] }}</li>
-                        <li><strong>Status: </strong>{{ appointment[5] }} {{ status[appointment[5]] }}</li>
                         <li><strong>PostDescription: </strong> {{ appointment[4] }}</li>
                     </ul>
                     <br>
 
-                    {% if appointment[5] == 2 or appointment[5] == 3 %}
-                        <form action="/appointment_action/{{ appointment[11] }}/{{ appointment[0] }}/Dismiss" style="display: inline-block; margin: 5px 5px 5px 5px;">
-                            <button type="submit" class="btn btn-primary">Dismiss</button>
+                    {% if user_type == 'doctor' %}
+                        <form action="/updatePostDesc/{{ appointment[11] }}/{{ appointment[0] }}" method="POST">
+                            <div class="mb-3">
+                                <label for="postDesc" class="form-label">Give Post-Description</label>
+                                <input type="text" class="form-control" id="postDesc" name="postDesc"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                     {% endif %}
-
 
                 </div>
             {% endfor %}

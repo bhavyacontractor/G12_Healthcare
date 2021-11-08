@@ -912,6 +912,64 @@ def appointment_notifications():
     print(appointments)
     return render_template('appointment_notifications.html', appointments=appointments, status=status)
 
+@app.route('/appointment_history', methods=['GET', 'POST'])
+def appointment_history():
+    user_type=session['type']
+    
+    if user_type == 'doctor':
+        Doc_ID = session['doc_ID']
+        today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+        query = '''
+            SELECT apt.UserID,apt.doc_ID,apt.MeetLink,apt.PreDescription,apt.PostDescription,apt.Acceptance_Status,
+                tslots.Start_Time,tslots.End_Time,tslots.Appt_Date,
+                user.UserName , user.UserPhone,
+                apt.Time_ID
+            FROM appointment apt 
+            JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
+            JOIN user user on apt.UserID = user.UserID
+            WHERE apt.doc_ID='%s' AND apt.Acceptance_Status=%s
+            and tslots.Appt_Date < '%s'
+            ORDER BY tslots.Appt_Date ASC''' % (Doc_ID, 1, today)
+
+    if user_type == 'user':
+        UserID = session['UserId']
+        today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+        query = '''
+            SELECT apt.UserID,apt.doc_ID,apt.MeetLink,apt.PreDescription,apt.PostDescription,apt.Acceptance_Status,
+                tslots.Start_Time,tslots.End_Time,tslots.Appt_Date,
+                user.UserName , user.UserPhone,
+                apt.Time_ID
+            FROM appointment apt 
+            JOIN timeslots tslots on apt.Time_ID = tslots.Time_ID
+            JOIN user user on apt.UserID = user.UserID
+            WHERE apt.UserID='%s' AND apt.Acceptance_Status=%s
+            and tslots.Appt_Date < '%s'
+            ORDER BY tslots.Appt_Date ASC''' % (UserID, 1,  today)
+
+    cur = myconn.cursor()
+    cur.execute(query)
+    pastAppointments = cur.fetchall()
+    myconn.commit()
+    cur.close()
+
+    return render_template('appointment_history.html',user_type=user_type,pastAppointments=pastAppointments)
+
+@app.route('/updatePostDesc/<int:Time_ID>/<int:UserID>', methods=['GET', 'POST'])
+def updatePostDesc(Time_ID,UserID):
+    if request.method == 'POST':
+        postDesc = request.form['postDesc']
+        query = '''
+        UPDATE appointment SET PostDescription='%s' WHERE 
+        Time_ID=%s AND UserID=%s
+        '''%(postDesc,Time_ID,UserID)
+
+        cur = myconn.cursor()
+        cur.execute(query)
+        myconn.commit()
+        cur.close()
+    return redirect('/appointment_history')
+
+
 
 @app.route('/appointment_action/<int:Time_ID>/<int:UserID>/<string:action>', methods=['GET', 'POST'])
 def appointment_action(Time_ID, UserID, action):
