@@ -689,6 +689,7 @@ def login():
             session['DOB'] = acc[5]
             session['sender_id'] = userid
             session['type'] = 'user'
+            session['search_state'] = 'None Selected'
             return render_template('user_index.html')
         else:
             return render_template('user_home.html', error_code=2)
@@ -1284,10 +1285,9 @@ def select_state():
 
     if request.method == 'POST':
         s = request.form['state']
-
-
-
-        query = "SELECT hosp_city FROM hospital where hosp_state='%s'"%(s)
+        session['search_state'] = s
+        
+        query = "SELECT hosp_city FROM hospital where hosp_state='%s'"%(session['search_state'])
 
         cur = myconn.cursor()
         cur.execute(query)
@@ -1299,14 +1299,20 @@ def select_state():
 def select_city():
     all_hospital=[]
     if request.method == 'POST':
-        city = request.form['city']
+        try:
+            city = request.form['city']
+            query = "SELECT * FROM hospital WHERE hosp_city ='%s'" % (city)
 
-        query = "SELECT * FROM hospital WHERE hosp_city ='%s'" % (city)
+            cur = myconn.cursor()
+            cur.execute(query)
+            all_hospital = cur.fetchall()
+        except:
+            city= 'all'
+            query = "SELECT * FROM hospital WHERE hosp_city ='%s'" % (city)
 
-
-        cur = myconn.cursor()
-        cur.execute(query)
-        all_hospital = cur.fetchall()
+            cur = myconn.cursor()
+            cur.execute(query)
+            all_hospital = cur.fetchall()
 
         return render_template('location.html', all_hospital=all_hospital)
     return render_template('location.html', all_hospital=all_hospital)
