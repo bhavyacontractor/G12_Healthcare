@@ -10,16 +10,7 @@ CREATE TABLE IF NOT EXISTS `Hospital` (
 `hosp_description` varchar(300),
   PRIMARY KEY (`hosp_id`));
   
-  CREATE TABLE IF NOT EXISTS `VaccineDetails` (
-  `hosp_ID` INT,
-  `v1_quant` INT,
-  `v2_quant` INT,
-  `v3_quant` INT,
-  PRIMARY KEY (`hosp_id`),
-  FOREIGN KEY (`hosp_id`) REFERENCES Hospital(`hosp_id`)
-  );
-  
-   CREATE TABLE IF NOT EXISTS `OxygenDetails` (
+CREATE TABLE IF NOT EXISTS `OxygenDetails` (
   `hosp_ID` INT,
   `litres_available` INT,
   `supply_per_hour` INT,
