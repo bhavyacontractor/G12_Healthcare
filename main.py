@@ -73,6 +73,7 @@ def register_page_update():
         hospAddress = hospDetails['hospAddress']
         hosp_city=hospDetails['hosp_city']
         hosp_state=hospDetails['hosp_state']
+        hosp_description=hospDetails['hosp_description']
 
         if len(hospName) >= 1:
             hospName = hospDetails['hospName']
@@ -117,6 +118,13 @@ def register_page_update():
         myconn.commit()
         cur.close()
 
+        if len(hosp_description) >= 1:
+            update_query = "UPDATE hospital SET hosp_description='%s' WHERE hosp_ID='%s'" % (hosp_description, hosp_ID)
+            cur = myconn.cursor()
+            cur.execute(update_query)
+            myconn.commit()
+            cur.close()
+
     hosp_ID = session["hosp_ID"]
     sql_query = "SELECT * FROM hospital WHERE hosp_ID ='%s'" % (int(hosp_ID))
     cur = myconn.cursor()
@@ -124,6 +132,7 @@ def register_page_update():
     hospDetails = cur.fetchall()
 
     return render_template('hospital_reg_update.html', hospDetails=hospDetails, hospName=session["hospName"])
+
 
 
 @app.route('/hospLogin', methods=['GET', 'POST'])
@@ -1202,22 +1211,59 @@ def search_ambulance(hosp_id):
 
 @app.route('/vaccine_book/<int:hosp_id>', methods=['GET', 'POST'])
 def vaccine_book(hosp_id):
+    p=0
+    user = session['UserId']
+    error = 0
     if hosp_id==0:
-        return 'go back'
+        return 'Error'
+    session['helper_hosp']=hosp_id
     hospvaccineDetails = ''
     if request.method == 'POST':
         dose = request.form['dose']
         vaccine_type = request.form['type']
-        query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>'%s'" % (hosp_id, dose, vaccine_type,datetime.date.today())
-        cur = myconn.cursor()
-        cur.execute(query)
-        hospvaccineDetails = cur.fetchall()
-        return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id)
-    return render_template('vaccine_book.html',hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id)
+
+        if dose=='1':
+            query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s'" % (hosp_id, dose, vaccine_type,datetime.date.today())
+            cur = myconn.cursor()
+            cur.execute(query)
+            hospvaccineDetails = cur.fetchall()
+            return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=error,p=1)
+        else:
+            query = '''select vs.appt_date, vs.vaccine_type
+                        from vaccine_book vb join vaccine_slots vs on vs.vaccine_time_id=vb.vaccine_time_id
+                         where vb.dose='%s' and vb.UserID='%s' ''' % (1, user)
+            cur = myconn.cursor()
+            cur.execute(query)
+            m = cur.fetchall()
+            cur.close()
+            if m!=[]:
+                today = (datetime.datetime.today()).strftime("%Y-%m-%d")
+                x=(m[0][0]).strftime("%Y-%m-%d")
+                a = arrow.get(today)
+                b = arrow.get(x)
+                delta = (a - b).days
+                if m[0][1]=='covishield' and delta<84:
+                    error=1
+                if m[0][1]=='covaxin' and delta<28:
+                    error=1
+                if m[0][1]=='sputnik' and delta<21:
+                    error=1
+                return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=error)
+            else:
+                query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s'" % (hosp_id, dose, vaccine_type, datetime.date.today())
+                cur = myconn.cursor()
+                cur.execute(query)
+                hospvaccineDetails = cur.fetchall()
+                return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails, hosp_id=hosp_id,error=error,p=1)
+
+    return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails, hosp_id=hosp_id, error=error)
 
 
 @app.route('/book', methods=['GET', 'POST'])
 def book():
+    error=0
+    h=session['helper_hosp']
+    hosp_id=int(h)
     if request.method == 'POST':
         time_id = request.form['time_id']
         query = "SELECT * FROM vaccine_slots WHERE vaccine_time_id='%s'" % (time_id)
@@ -1225,17 +1271,35 @@ def book():
         cur.execute(query)
         hospvaccinedetails = cur.fetchall()
         cur.close()
-        print(hospvaccinedetails[0][0])
         user = session['UserId']
-        print(user)
-        query = "INSERT INTO vaccine_book(UserID,vaccine_time_id,hosp_id,dose) VALUES ('%s',%s,%s,%s)" % (
-        user, int(hospvaccinedetails[0][0]), int(hospvaccinedetails[0][1]), int(hospvaccinedetails[0][5]))
-        cur = myconn.cursor()
-        # INSERT INTO user(UserId, UserName, UserPassword) VALUES( % s, % s, % s)', (userid, name, passwd)
-        cur.execute(query)
-        myconn.commit()
-        return 'booked'
-    return 'Booked suceessfully'
+        m=int(hospvaccinedetails[0][6])
+
+        try:
+            query = "INSERT INTO vaccine_book(UserID,vaccine_time_id,hosp_id,dose) VALUES ('%s',%s,%s,%s)" % (
+            user, int(hospvaccinedetails[0][0]), int(hospvaccinedetails[0][1]), int(hospvaccinedetails[0][5]))
+            cur = myconn.cursor()
+            cur.execute(query)
+            myconn.commit()
+            if m == 1:
+                query = "delete FROM vaccine_slots WHERE vaccine_time_id='%s'" % (time_id)
+                cur = myconn.cursor()
+                cur.execute(query)
+                myconn.commit()
+                cur.close()
+            else:
+                query = "update vaccine_slots set total_persons=%s WHERE vaccine_time_id='%s'" % (int(m-1),time_id)
+                cur = myconn.cursor()
+                cur.execute(query)
+                myconn.commit()
+                cur.close()
+
+            return render_template('vaccine_book.html',error=3,hosp_id=hosp_id)
+
+        except:
+            
+            return render_template('vaccine_book.html',error=2,hosp_id=hosp_id)
+
+    return render_template('vaccine_book.html')
 
 
 @app.route('/search_doctors/<string:speciality>', methods=['GET', 'POST'])
