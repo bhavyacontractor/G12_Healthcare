@@ -16,26 +16,7 @@
         <br>
         <center><h1 style="color: white;">HealthCare Portal</h1> <br> <br></center>
         <div class="base">
-        <div class="flex_box" id="first_flex">
-            <h5 style="font-weight: 400; color: white;">Give Your Feedback!!</h5>
-            <form action="/analyze" method="POST">
-                <textarea name="statement" id="" rows="4"></textarea>
-                <!-- <input type="text" name="statement" id=""> -->
-                <br>
-                <button type="submit" class="btn btn-primary">Analyze</button>
-            </form>
-            <br> <br> <br>
-            {% if subjectivity|float < 0.005 and subjectivity|float != 5.0 %}
-                <h5 style="font-weight: 400; color: white;">Subjective Statement.</h5>
-            {% else %}
-                {% if polarity|float >= 0 and subjectivity|float != 5.0 %}
-                    <h5 style="font-weight: 400; color: white;">Positive Statement! Thanks for your feedback.</h5>
-                {% endif %}
-                {% if polarity|float < 0 and subjectivity|float != 5.0 %}
-                    <h5 style="font-weight: 400; color: white;">Negative Statement! We'll try to improve our service. Thanks for your feedback.</h5>            
-                {% endif %}
-            {% endif %}
-        </div>
+        
         <!-- <center> -->
         <div class="flex_box">
             <a href="/hospRegisterInitial" class="logOutBtn">Hospital Register</a> <br> <br>

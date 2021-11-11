@@ -34,23 +34,6 @@ def home_page():
     return render_template('home.html', polarity=5.0, subjectivity=5.0)
 
 
-@app.route("/analyze", methods=['GET', 'POST'])
-def analyze():
-    flag = "not entered"
-    if request.method == 'POST':
-        flag = "entered"
-        statement = request.form.get('statement')
-        result = TextBlob(statement).sentiment
-        print(result)
-        # print("Polarity: {:1f.4} , Subjectivity: {:1f.4}".format(result.polarity, result.subjectivity))
-        polarity = float(result.polarity)
-        subjectivity = float(result.subjectivity)
-        print(type(polarity))
-        return render_template('home.html', polarity=round(polarity, 4), subjectivity=round(subjectivity, 4))
-
-    return render_template('home.html', polarity=5.0, subjectivity=5.0)
-
-
 @app.route('/hospRegisterInitial', methods=['GET', 'POST'])
 def register_page_init():
     error_code = 0
@@ -1317,6 +1300,18 @@ def select_city():
         return render_template('location.html', all_hospital=all_hospital)
     return render_template('location.html', all_hospital=all_hospital)
 
+@app.route('/mental_health',methods=['GET','POST'])
+def mental_health():
+    if request.method == 'POST':
+        statement = request.form.get('statement')
+        result = TextBlob(statement).sentiment
+        print(result)
+        polarity = float(result.polarity)
+        subjectivity = float(result.subjectivity)
+        # print(type(polarity))
+        return render_template('mental_health.html', polarity=round(polarity, 4), subjectivity=round(subjectivity, 4))
+
+    return render_template('mental_health.html', polarity=5.0, subjectivity=5.0)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

@@ -41,73 +41,64 @@
                     <a class="nav-link" href="/">Vaccine Notifications<span class="sr-only"></span></a>
                 </li>
             </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/mental_health">Mental Health<span class="sr-only"></span></a>
+                </li>
+            </ul>
         </div>
     </nav>
     
     <div class="container my-3">
         <h1>Update Values</h1>
-<form method="post" action="{{ url_for('update') }}">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Enter Address</h5>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <input type="text" name="add" placeholder="Address" style="width: 100%;">
-            </div>
-        <h5 class="card-title">Enter Phone Number</h5>
-        <div class="form-group" style="margin-bottom: 20px;">
-            <input type="number" name="phno" placeholder="Phone Number" style="width: 100%;">
-        </div>
-        <h5 class="card-title">Enter Date of Birth</h5>
-        <div class="form-group" style="margin-bottom: 20px;">
-            <input type="date" name="dob" placeholder="Date of Birth" style="width: 100%;">
-        </div>
+        <form method="post" action="{{ url_for('update') }}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Enter Address</h5>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <input type="text" name="add" placeholder="Address" style="width: 100%;">
+                    </div>
+                <h5 class="card-title">Enter Phone Number</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="number" name="phno" placeholder="Phone Number" style="width: 100%;">
+                </div>
+                <h5 class="card-title">Enter Date of Birth</h5>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="date" name="dob" placeholder="Date of Birth" style="width: 100%;">
+                </div>
 
-        <button class="btn btn-primary" type="submit">Update</button>
-        </div></div>
-</form></div>
-<div class="container my-3">
-    <h1>Profile</h1>
-    <div class="card">
-        <h5 class="card-title">Userid: {{ session.UserId }}</h5><br>
-        <h5 class="card-title">Name: {{ session.Name }}</h5><br>
-        <h5 class="card-title">Address: {{ session.Address }}</h5><br>
-        <h5 class="card-title">Phone Number: {{ session.Phone }}<br></h5><br>
-        <h5 class="card-title">Date of Birth: {{ session.DOB }}<br></h5><br>
-</div></div>
-<div class="container my-3">
-<form action="{{ url_for('logout') }}">
-    <button class="btn btn-primary" type="submit">Logout</button>
-</form></div>
-    
-        <br>
-    <!-- <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        Search hospital by facilities
-      </button>
-      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-            <li><a class="dropdown-item" href="/search_oxygen">COVID-19 Oxygen Status</a></li>
-            <li><a class="dropdown-item" href="/search_surgery">Surgery and Emergency</a></li>
-            <li><a class="dropdown-item" href="/search_beds">COVID-19 Beds</a></li>
-            <li><a class="dropdown-item" href="/search_blood">Blood Donation</a></li>
-            <li><a class="dropdown-item" href="/search_ambulance">Ambulance Details</a></li>
-      </ul>
-    </div> -->
-    <br>
-
-<!-- <form action="">
-    Search Hospitals (Amit,Priyansh)
-</form> -->
-    <a href="/select_state" class="btn btn-primary">search hospital by location</a>
-
-<div class="container my-3">
-    <form action="/search_doctors/none" method="POST">
-    <div class="card">
-        <div class="card-body">
-            <button class="btn btn-primary" id="srchDocBtn">Search Doctors</button>
+                <button class="btn btn-primary" type="submit">Update</button>
+                </div></div>
+        </form>
+    </div>
+    <div class="container my-3">
+        <h1>Profile</h1>
+        <div class="card">
+            <h5 class="card-title">Userid: {{ session.UserId }}</h5><br>
+            <h5 class="card-title">Name: {{ session.Name }}</h5><br>
+            <h5 class="card-title">Address: {{ session.Address }}</h5><br>
+            <h5 class="card-title">Phone Number: {{ session.Phone }}<br></h5><br>
+            <h5 class="card-title">Date of Birth: {{ session.DOB }}<br></h5><br>
         </div>
     </div>
-  </form>
-</div>
+    
+    
+    <br><br>
+
+    <div class="container">
+        <a href="/select_state" class="btn btn-primary">Search hospital by location</a>
+    </div>
+    
+
+    <div class="container my-3">
+        <form action="/search_doctors/none" method="POST">
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-primary" id="srchDocBtn">Search Doctors</button>
+            </div>
+        </div>
+        </form>
+    </div>
 
 
 
