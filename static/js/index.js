@@ -1,3 +1,2 @@
-console.log("Javascript!!!");
+console.log("Javascript Chat!!!");
 
-console.log(hospDetails)

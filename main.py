@@ -158,6 +158,7 @@ def login_page():
         if i == 1:
             session["hosp_ID"] = hospDetails[0][0]
             session["hospName"] = hospDetails[0][1]
+            session['type'] = 'hospital'
             hosp_ID = session["hosp_ID"]
             cur = myconn.cursor()
             cur.execute("SELECT * FROM Hospital WHERE hosp_ID ='%s'" % (int(hosp_ID)))
@@ -1352,17 +1353,18 @@ def search_doctors(speciality):
 def select_state():
     all_hospital = []
     all_cities=''
+    session['search_state'] = 'None'
+    session['search_city'] = 'None'
 
     if request.method == 'POST':
         s = request.form['state']
         session['search_state'] = s
         
-        query = "SELECT DISTINCT hosp_city FROM hospital where hosp_state='%s'"%(session['search_state'])
-
-        cur = myconn.cursor()
-        cur.execute(query)
-        all_cities = cur.fetchall()
-        return render_template('location.html', all_cities=all_cities, all_hospital=all_hospital)
+    query = "SELECT DISTINCT hosp_city FROM hospital where hosp_state='%s'"%(session['search_state'])
+    cur = myconn.cursor()
+    cur.execute(query)
+    all_cities = cur.fetchall()
+        
     return render_template('location.html', all_cities=all_cities, all_hospital=all_hospital)
 
 @app.route('/select_city', methods=['GET', 'POST'])
@@ -1371,21 +1373,28 @@ def select_city():
     if request.method == 'POST':
         try:
             city = request.form['city']
-            query = "SELECT * FROM hospital WHERE hosp_city ='%s'" % (city)
+            if city=='all':
+                session['search_city'] = "All"
+            else:
+                session['search_city'] = city
+
+            
+            if session['search_city']=='All':
+                query = "SELECT * FROM hospital WHERE hosp_state='%s'"%(session['search_state'])
+            else:
+                query = "SELECT * FROM hospital WHERE hosp_state='%s' AND hosp_city='%s'"%(session['search_state'],session['search_city'])
 
             cur = myconn.cursor()
             cur.execute(query)
             all_hospital = cur.fetchall()
+
+
         except:
-            city= 'all'
-            query = "SELECT * FROM hospital WHERE hosp_city ='%s'" % (city)
+            print("Invalid Query")
 
-            cur = myconn.cursor()
-            cur.execute(query)
-            all_hospital = cur.fetchall()
-
+       
+            
         return render_template('location.html', all_hospital=all_hospital)
-    return render_template('location.html', all_hospital=all_hospital)
 
 @app.route('/mental_health',methods=['GET','POST'])
 def mental_health():
@@ -1404,7 +1413,6 @@ def mental_health():
 @app.route('/vaccine_notifications', methods=['GET', 'POST'])
 def vaccine_notifications():
     UserID = session['UserId']
-
 
     query = '''
             select vs.appt_date,h.hospName,vs.start_time,vs.end_time,vs.vaccine_type,vs.dose 
@@ -1430,7 +1438,7 @@ def vaccine_notifications():
     username = cur.fetchall()
     cur.close()
 
-    return render_template('vaccine_notifications.html',d1=d1,d2=d2,UserID=UserID,username=username )
+    return render_template('vaccine_notifications.html',d1=d1,d2=d2,UserID=UserID,username=username)
 
 
 if __name__ == '__main__':

@@ -14,6 +14,5 @@ DROP TABLE `Doctor`;
 DROP TABLE `User`;
 DROP TABLE `Hospital`;
 
-DROP TABLE `Vaccine_Book`;
-DROP TABLE `Vaccine_Slots`;
+
 
