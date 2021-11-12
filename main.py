@@ -662,6 +662,16 @@ def update_doctors():
 def home():
     return render_template('user_home.html', error_code=0)
 
+@app.route('/user_index', methods=['GET', 'POST'])
+def user_index():
+    cur = myconn.cursor()
+    cur.execute('SELECT * FROM user WHERE UserID=%s'%(session['UserId']))
+    user_details = cur.fetchall()
+    myconn.commit()
+    cur.close()
+    return render_template('user_index.html',user_details=user_details)
+
+
 
 @app.route('/user_login', methods=['GET', 'POST'])
 def login():
@@ -683,7 +693,7 @@ def login():
             session['sender_id'] = userid
             session['type'] = 'user'
             session['search_state'] = 'None Selected'
-            return render_template('user_index.html')
+            return redirect('/user_index')
         else:
             return render_template('user_home.html', error_code=2)
 
@@ -703,21 +713,9 @@ def register():
             cur.execute('INSERT INTO user (UserId, UserName, UserPassword) VALUES (%s, %s, %s)', (userid, name, passwd))
             myconn.commit()
             cur.close()
-            # session['loggedin'] = True
-            # session['UserId'] = userid
-            # session['Name'] = name
-            # session['Address'] = ''
-            # session['Phone'] = ''
-            # session['DOB'] = ''
             return render_template('user_home.html', error_code=1)
         except:
             return render_template('user_home.html', error_code=2)
-
-
-@app.route('/user_index', methods=['GET', 'POST'])
-def user_index():
-    return render_template('user_index.html')
-
 
 @app.route('/user_update', methods=['GET', 'POST'])
 def update():
@@ -725,16 +723,37 @@ def update():
         add = request.form['add']
         phno = request.form['phno']
         dob = request.form['dob']
-        session['Address'] = add
-        session['Phone'] = phno
-        session['DOB'] = dob
-        cur = myconn.cursor()
-        cur.execute('UPDATE user SET UserAddress=%s, UserPhone=%s, UserDOB=%s WHERE UserId=%s',
-                    (add, phno, dob, session['UserId']))
-        myconn.commit()
-        cur.close()
 
-        return render_template('user_index.html')
+        print(add,phno,dob)
+
+        if add!='':
+            cur = myconn.cursor()
+            cur.execute('UPDATE user SET UserAddress=%s WHERE UserId=%s',(add,session['UserId']))
+            myconn.commit()
+            cur.close()
+        else:
+            print('No Address')
+
+        if phno:
+            cur = myconn.cursor()
+            cur.execute('UPDATE user SET  UserPhone=%s WHERE UserId=%s',(phno,session['UserId']))
+            myconn.commit()
+            cur.close()
+            session['Phone'] = phno
+        else:
+            print('No Phone')
+
+        try:
+            if dob:
+                cur = myconn.cursor()
+                cur.execute('UPDATE user SET UserDOB=%s WHERE UserId=%s',(dob,session['UserId']))
+                myconn.commit()
+                cur.close()
+                
+        except:
+            print('No DOB')
+        
+        return redirect('/user_index')
 
 
 @app.route('/user_logout')
@@ -1233,11 +1252,13 @@ def vaccine_book(hosp_id):
             cur.close()
             if m!=[]:
                 return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=5)
+            
             query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s' and total_persons>%s" % (hosp_id, dose, vaccine_type,datetime.date.today(),0)
             cur = myconn.cursor()
             cur.execute(query)
             hospvaccineDetails = cur.fetchall()
             return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=error,p=1)
+        
         else:
             query = '''select vs.appt_date, vs.vaccine_type
                         from vaccine_book vb join vaccine_slots vs on vs.vaccine_time_id=vb.vaccine_time_id

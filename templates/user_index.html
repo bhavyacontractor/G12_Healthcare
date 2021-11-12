@@ -74,11 +74,11 @@
     <div class="container my-3">
         <h1>Profile</h1>
         <div class="card">
-            <h5 class="card-title">Userid: {{ session.UserId }}</h5><br>
-            <h5 class="card-title">Name: {{ session.Name }}</h5><br>
-            <h5 class="card-title">Address: {{ session.Address }}</h5><br>
-            <h5 class="card-title">Phone Number: {{ session.Phone }}<br></h5><br>
-            <h5 class="card-title">Date of Birth: {{ session.DOB }}<br></h5><br>
+            <h5 class="card-title">Userid: {{user_details[0][0]}}</h5><br>
+            <h5 class="card-title">Name: {{user_details[0][1]}}</h5><br>
+            <h5 class="card-title">Address:{{user_details[0][3]}}</h5><br>
+            <h5 class="card-title">Phone Number: {{user_details[0][4]}}<br></h5><br>
+            <h5 class="card-title">Date of Birth: {{user_details[0][5]}}<br></h5><br>
         </div>
     </div>
     

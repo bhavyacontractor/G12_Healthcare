@@ -1,6 +1,5 @@
 DROP TABLE `vaccine_book`;
 DROP TABLE `vaccine_slots`;
-DROP TABLE `VaccineDetails`;
 DROP TABLE `OxygenDetails`;
 DROP TABLE `SurgeryDetails`;
 DROP TABLE `BedsDetails`;
