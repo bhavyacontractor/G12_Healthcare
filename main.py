@@ -1379,5 +1379,38 @@ def mental_health():
 
     return render_template('mental_health.html', polarity=5.0, subjectivity=5.0)
 
+
+@app.route('/vaccine_notifications', methods=['GET', 'POST'])
+def vaccine_notifications():
+    UserID = session['UserId']
+
+
+    query = '''
+            select vs.appt_date,h.hospName,vs.start_time,vs.end_time,vs.vaccine_type,vs.dose 
+            from vaccine_book vb join vaccine_slots vs on vs.vaccine_time_id=vb.vaccine_time_id 
+            join hospital h on h.hosp_id=vs.hosp_id where vb.dose='%s' and vb.UserID='%s' ''' % (1, UserID)
+    cur = myconn.cursor()
+    cur.execute(query)
+    d1 = cur.fetchall()
+    cur.close()
+
+    query = '''
+                select vs.appt_date,h.hospName,vs.start_time,vs.end_time,vs.vaccine_type,vs.dose 
+                from vaccine_book vb join vaccine_slots vs on vs.vaccine_time_id=vb.vaccine_time_id 
+                join hospital h on h.hosp_id=vs.hosp_id where vb.dose='%s' and vb.UserID='%s' ''' % (2, UserID)
+    cur = myconn.cursor()
+    cur.execute(query)
+    d2 = cur.fetchall()
+    cur.close()
+    print(d2)
+    query = '''select UserName from user where UserID='%s' ''' % (UserID)
+    cur = myconn.cursor()
+    cur.execute(query)
+    username = cur.fetchall()
+    cur.close()
+
+
+    return render_template('vaccine_notifications.html',d1=d1,d2=d2,UserID=UserID,username=username )
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
