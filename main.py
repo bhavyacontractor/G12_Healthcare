@@ -9,9 +9,10 @@ from nltk.util import pr
 from werkzeug.utils import redirect
 import datetime
 from textblob import TextBlob
+import arrow
 state=""
+
 app = Flask(__name__)
-# hh
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
@@ -1223,7 +1224,16 @@ def vaccine_book(hosp_id):
         vaccine_type = request.form['type']
 
         if dose=='1':
-            query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s'" % (hosp_id, dose, vaccine_type,datetime.date.today())
+            query = '''select vs.appt_date, vs.vaccine_type
+                        from vaccine_book vb join vaccine_slots vs on vs.vaccine_time_id=vb.vaccine_time_id
+                        where vb.dose='%s' and vb.UserID='%s' ''' % (1, user)
+            cur = myconn.cursor()
+            cur.execute(query)
+            m = cur.fetchall()
+            cur.close()
+            if m!=[]:
+                return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=5)
+            query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s' and total_persons>%s" % (hosp_id, dose, vaccine_type,datetime.date.today(),0)
             cur = myconn.cursor()
             cur.execute(query)
             hospvaccineDetails = cur.fetchall()
@@ -1231,30 +1241,29 @@ def vaccine_book(hosp_id):
         else:
             query = '''select vs.appt_date, vs.vaccine_type
                         from vaccine_book vb join vaccine_slots vs on vs.vaccine_time_id=vb.vaccine_time_id
-                         where vb.dose='%s' and vb.UserID='%s' ''' % (1, user)
+                        where vb.dose='%s' and vb.UserID='%s' ''' % (1, user)
             cur = myconn.cursor()
             cur.execute(query)
             m = cur.fetchall()
             cur.close()
             if m!=[]:
+                print(m)
                 today = (datetime.datetime.today()).strftime("%Y-%m-%d")
                 x=(m[0][0]).strftime("%Y-%m-%d")
                 a = arrow.get(today)
                 b = arrow.get(x)
                 delta = (a - b).days
-                if m[0][1]=='covishield' and delta<84:
-                    error=1
-                if m[0][1]=='covaxin' and delta<28:
-                    error=1
-                if m[0][1]=='sputnik' and delta<21:
-                    error=1
-                return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=error)
-            else:
-                query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s'" % (hosp_id, dose, vaccine_type, datetime.date.today())
-                cur = myconn.cursor()
-                cur.execute(query)
-                hospvaccineDetails = cur.fetchall()
-                return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails, hosp_id=hosp_id,error=error,p=1)
+                if m[0][1]!=vaccine_type:
+                    return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=4)
+                if (m[0][1]=='covishield' and delta<84) or (m[0][1]=='covaxin' and delta<28) or (m[0][1]=='sputnik' and delta<21):
+                    return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails,hosp_id=hosp_id,error=1)
+               
+                
+            query = "SELECT * FROM vaccine_slots WHERE hosp_ID ='%s' and dose='%s' and vaccine_type='%s' and appt_date>='%s' and total_persons>%s" % (hosp_id, dose, vaccine_type, datetime.date.today(),0)
+            cur = myconn.cursor()
+            cur.execute(query)
+            hospvaccineDetails = cur.fetchall()
+            return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails, hosp_id=hosp_id,error=error,p=1)
 
     return render_template('vaccine_book.html', hospvaccineDetails=hospvaccineDetails, hosp_id=hosp_id, error=error)
 
@@ -1280,18 +1289,11 @@ def book():
             cur = myconn.cursor()
             cur.execute(query)
             myconn.commit()
-            if m == 1:
-                query = "delete FROM vaccine_slots WHERE vaccine_time_id='%s'" % (time_id)
-                cur = myconn.cursor()
-                cur.execute(query)
-                myconn.commit()
-                cur.close()
-            else:
-                query = "update vaccine_slots set total_persons=%s WHERE vaccine_time_id='%s'" % (int(m-1),time_id)
-                cur = myconn.cursor()
-                cur.execute(query)
-                myconn.commit()
-                cur.close()
+            query = "update vaccine_slots set total_persons=%s WHERE vaccine_time_id='%s'" % (int(m-1),time_id)
+            cur = myconn.cursor()
+            cur.execute(query)
+            myconn.commit()
+            cur.close()
 
             return render_template('vaccine_book.html',error=3,hosp_id=hosp_id)
 
@@ -1334,7 +1336,7 @@ def select_state():
         s = request.form['state']
         session['search_state'] = s
         
-        query = "SELECT hosp_city FROM hospital where hosp_state='%s'"%(session['search_state'])
+        query = "SELECT DISTINCT hosp_city FROM hospital where hosp_state='%s'"%(session['search_state'])
 
         cur = myconn.cursor()
         cur.execute(query)
