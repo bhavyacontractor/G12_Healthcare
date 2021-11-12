@@ -4,80 +4,108 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
     <title>Vaccine Portal</title>
 </head>
 <body>
-    <h1>Add Slots</h1>
-    <form action="/add_vaccine_slot" method="post">
-        <span>Enter date</span> <br>
-        <input type="date" name="appt_date" id="" > <br>
-        <br>
-        <span>Input start time</span> <br>
-        <input type="time" name="start_time"> <br>
-        <br>
-        <span>Enter end time</span> <br>
-        <input type="time" name="end_time"> <br>
-        <br>
-        <span>Enter Dose</span> <br>
-        <input type="number" name="dose" id="" min="1" max="2"> <br>
-        <br>
-        <span>Enter vaccine available in this slot</span> <br>
-        <input type="checkbox" name="vaccine" id="" value="covaxin"><label for="vaccine">Covaxin</label> <br>
-        <input type="checkbox" name="vaccine" id="" value="covishield"><label for="vaccine">Covishield</label> <br>
-        <input type="checkbox" name="vaccine" id="" value="sputnik"><label for="vaccine">Sputnik</label> <br>
-        <br>
-        <span>Enter maximum persons allowed in this slot</span> <br>
-        <input type="number" name="total_persons" id="" min="0"> <br>
-        <br>
-        <input type="submit" value="Add slot">
-        {% if msg == "Added Sucessfully!!" or msg == "Slot is already present" %}
-            <span>{{ msg }}</span>
-        {% endif %}
-    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-    <h1>List Of People Coming For Vaccination</h1>
-    <form action="/display_vaccine_bookings" method="post">
-        <span>Select the date</span> <br>
-        <input type="checkbox" name="day" id="" value="today"> Today <br>
-        <input type="checkbox" name="day" id="" value="tomorrow"> Tomorrow <br>
-        <input type="checkbox" name="day" id="" value="day_after_tomorrow"> Day After Tomorrow <br>
-        <br>
-        <input type="submit" value="See List"> <br>
-    </form>
+        <a class="navbar-brand" href="#">Add Vaccine Slot</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/hospAfterLogin">Hospital Home<span class="sr-only"></span></a>
+                </li>
+            </ul>
+        </div>
+      </nav>
+      <br>
+      <div class="container">
+            <h1>Add Slots</h1>
+            <form action="/add_vaccine_slot" method="post">
+                <span>Enter date</span> <br>
+                <input type="date" name="appt_date" id="" > <br>
+                <br>
+                <span>Input start time</span> <br>
+                <input type="time" name="start_time"> <br>
+                <br>
+                <span>Enter end time</span> <br>
+                <input type="time" name="end_time"> <br>
+                <br>
+                <span>Enter Dose</span> <br>
+                <input type="number" name="dose" id="" min="1" max="2"> <br>
+                <br>
+                <span>Enter vaccine available in this slot</span> <br>
+                <input type="checkbox" name="vaccine" id="" value="covaxin"><label for="vaccine">Covaxin</label> <br>
+                <input type="checkbox" name="vaccine" id="" value="covishield"><label for="vaccine">Covishield</label> <br>
+                <input type="checkbox" name="vaccine" id="" value="sputnik"><label for="vaccine">Sputnik</label> <br>
+                <br>
+                <span>Enter maximum persons allowed in this slot</span> <br>
+                <input type="number" name="total_persons" id="" min="0"> <br>
+                <br>
+                <input type="submit" value="Add slot">
+                {% if msg == "Added Sucessfully!!" or msg == "Slot is already present" %}
+                    <span>{{ msg }}</span>
+                {% endif %}
+            </form>
+        
+            <h1>List Of People Coming For Vaccination</h1>
+            <form action="/display_vaccine_bookings" method="post">
+                <span>Select the date</span> <br>
+                <input type="checkbox" name="day" id="" value="today"> Today <br>
+                <input type="checkbox" name="day" id="" value="tomorrow"> Tomorrow <br>
+                <input type="checkbox" name="day" id="" value="day_after_tomorrow"> Day After Tomorrow <br>
+                <br>
+                <input type="submit" value="See List"> <br>
+            </form>
+        
+            {% for day in ls %}
+                {% set disp = days[ls.index(day)].split('_') %}
+                {% set bo = day=="today" or day=="tomorrow" or day=="day_after_tomorrow" %}
+                {% if day|length and bo!=True %}
+                    <h2>{{ disp | join(' ') | upper }}</h2>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th>Time</th>
+                            <th>Dose</th>
+                            <th>Vaccine</th>
+                            <!-- <th></th> -->
+                        </tr>
+        
+                        {% for entry in day %}
+                            <tr>
+                                <td>{{ entry[1] }}</td>
+                                <td>{{ entry[2] }}</td>
+                                <td>{{ entry[3] }} - {{ entry[4] }}</td>
+                                <td>{{ entry[6] }}</td>
+                                <td>{{ entry[7] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <br>
+                {% else %}
+                    <h2>{{ disp | join(' ') | upper }}</h2>
+                    <!-- <h2>{{ days[ls.index(day)] | upper }}</h2> -->
+                    <span>No Bookings</span>
+                    <br>
+                {% endif %}
+            {% endfor %}
+    
 
-    {% for day in ls %}
-        {% set disp = days[ls.index(day)].split('_') %}
-        {% set bo = day=="today" or day=="tomorrow" or day=="day_after_tomorrow" %}
-        {% if day|length and bo!=True %}
-            <h2>{{ disp | join(' ') | upper }}</h2>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Time</th>
-                    <th>Dose</th>
-                    <th>Vaccine</th>
-                    <!-- <th></th> -->
-                </tr>
-
-                {% for entry in day %}
-                    <tr>
-                        <td>{{ entry[1] }}</td>
-                        <td>{{ entry[2] }}</td>
-                        <td>{{ entry[3] }} - {{ entry[4] }}</td>
-                        <td>{{ entry[6] }}</td>
-                        <td>{{ entry[7] }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <br>
-        {% else %}
-            <h2>{{ disp | join(' ') | upper }}</h2>
-            <!-- <h2>{{ days[ls.index(day)] | upper }}</h2> -->
-            <span>No Bookings</span>
-            <br>
-        {% endif %}
-    {% endfor %}
-
+      </div>
+    
 </body>
 </html>
