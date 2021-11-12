@@ -55,20 +55,20 @@
                           <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
                       </div>
                       <div class="profile-thumb-block">
-                          <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
+                          <img src="{{ url_for('static',filename='hospBuilding.jpg')}}" alt="profile-image" class="profile"/>
                       </div>
                       <div class="card-content">
                       <h2>{{ hospName }}</h2>
                      
-                      <ul>
+                      
                         <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
                         <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
                         <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
                         <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
                         <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
                         <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                        <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                      </ul>
+                        <b>Hospital Description:</b> {{hospAllDetails[0][8]}} <br>
+                      
                       
 
                       </div>
@@ -86,103 +86,59 @@
               <div class="col-md-4">
                   <div class="card profile-card-3">
                       <div class="background-block">
-                          <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
+                          <img src="{{ url_for('static',filename='oxygen.jpg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
                       </div>
                       <div class="profile-thumb-block">
                           <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
                       </div>
                       <div class="card-content">
-                      <h2>{{ hospName }}</h2>
-                    
-                      <ul>
-                        <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
-                        <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
-                        <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
-                        <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
-                        <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
-                        <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                        <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                      </ul>
-                      
-
+                        <h2>COVID-19 Oxygen Status</h2>
+                        <div class="icon-block"><a href="/updateOxygen"><button type="button" class="btn btn-outline-dark" style="width: 80%; align-self: center;">Update Oxygen Status</button></a></div>
                       </div>
                   </div>
-                  
               </div>
 
               <div class="col-md-4">
                 <div class="card profile-card-3">
                     <div class="background-block">
-                        <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
+                        <img src="{{ url_for('static',filename='surgery.jpg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
                     </div>
                     <div class="profile-thumb-block">
                         <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
                     </div>
                     <div class="card-content">
-                    <h2>{{ hospName }}</h2>
-                  
-                    <ul>
-                      <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
-                      <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
-                      <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
-                      <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
-                      <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
-                      <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                      <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                    </ul>
-                    
-
+                      <h2>Surgery</h2>
+                      <div class="icon-block"><a href="/updateSurgery"><button type="button" class="btn btn-outline-dark" style="width: 80%; align-self: center;">Update Surgery Details</button></a></div>
                     </div>
                 </div>
               </div>
-              
+
               <div class="col-md-4">
                 <div class="card profile-card-3">
-                    <div class="background-block">
-                        <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
-                    </div>
-                    <div class="profile-thumb-block">
-                        <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
-                    </div>
-                    <div class="card-content">
-                    <h2>{{ hospName }}</h2>
-                  
-                    <ul>
-                      <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
-                      <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
-                      <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
-                      <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
-                      <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
-                      <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                      <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                    </ul>
-                    
-
-                    </div>
+                  <div class="background-block">
+                      <img src="{{ url_for('static',filename='beds.jpg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
+                  </div>
+                  <div class="profile-thumb-block">
+                      <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
+                  </div>
+                  <div class="card-content">
+                    <h2>COVID-19 Beds</h2>
+                    <div class="icon-block"><a href="/updateBeds"><button type="button" class="btn btn-outline-dark" style="width: 80%; align-self: center;">Update Bed Details</button></a></div>
+                  </div>
                 </div>
-                    
               </div>
 
               <div class="col-md-4">
                 <div class="card profile-card-3">
                     <div class="background-block">
-                        <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
+                        <img src="{{ url_for('static',filename='blood_donation.jpg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
                     </div>
                     <div class="profile-thumb-block">
                         <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
                     </div>
                     <div class="card-content">
-                    <h2>{{ hospName }}</h2>
-                  
-                    <ul>
-                      <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
-                      <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
-                      <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
-                      <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
-                      <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
-                      <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                      <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                    </ul>
+                      <h2>Blood Donation</h2>
+                      <div class="icon-block"><a href="/updateBlood"><button type="button" class="btn btn-outline-dark" style="width: 80%; align-self: center;">Update Blood Details</button></a></div>
                     </div>
                 </div>
               </div>
@@ -190,55 +146,31 @@
               <div class="col-md-4">
                 <div class="card profile-card-3">
                     <div class="background-block">
-                        <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
+                        <img src="{{ url_for('static',filename='ambulance.png')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
                     </div>
                     <div class="profile-thumb-block">
                         <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
                     </div>
                     <div class="card-content">
-                    <h2>{{ hospName }}</h2>
-                  
-                    <ul>
-                      <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
-                      <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
-                      <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
-                      <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
-                      <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
-                      <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                      <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                    </ul>
-                    
-
+                      <h2>Ambulance Details</h2>
+                      <div class="icon-block"><a href="/updateAmbulance"><button type="button" class="btn btn-outline-dark" style="width: 80%; align-self: center;">Update Ambulance Details</button></a></div>
                     </div>
                 </div>
-                
               </div>
-              
+
               <div class="col-md-4">
                 <div class="card profile-card-3">
                     <div class="background-block">
-                        <img src="{{ url_for('static',filename='hospital.jpg.jpeg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
+                        <img src="{{ url_for('static',filename='vaccine.jpg')}}" style="height: 50%; width: 40%;" alt="profile-sample1" class="background"/>
                     </div>
                     <div class="profile-thumb-block">
                         <img src="{{ url_for('static',filename='plus.jpg')}}" alt="profile-image" class="profile"/>
                     </div>
                     <div class="card-content">
-                    <h2>{{ hospName }}</h2>
-                  
-                    <ul>
-                      <b>Hospital Name:</b> {{hospAllDetails[0][1]}} <br>
-                      <b>Hospital Email:</b> {{hospAllDetails[0][2]}} <br>
-                      <b>Hospital Phone:</b> {{hospAllDetails[0][3]}} <br>
-                      <b>Hospital Address:</b> <small>{{hospAllDetails[0][4]}}</small> <br>
-                      <b>Hospital City:</b> {{hospAllDetails[0][5]}} <br>
-                      <b>Hospital State:</b> {{hospAllDetails[0][6]}} <br>
-                      <b>Hospital Description:</b> {{hospAllDetails[0][7]}} <br>
-                    </ul>
-                    
-
+                      <h2>COVID-19 Vaccination</h2>
+                      <div class="icon-block"><a href="/add_vaccine_slot"><button type="button" class="btn btn-outline-dark" style="width: 80%; align-self: center;">Vaccine Portal</button></a></div>
                     </div>
                 </div>
-              
               </div>
             </div>
         </div>
@@ -246,20 +178,6 @@
       
 
 
-     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          Update Facility Details
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-            <li><a class="dropdown-item" href="/updateOxygen">COVID-19 Oxygen Status</a></li>
-            <li><a class="dropdown-item" href="/updateSurgery">Surgery and Emergency</a></li>
-            <li><a class="dropdown-item" href="/updateBeds">COVID-19 Beds</a></li>
-            <li><a class="dropdown-item" href="/updateBlood">Blood Donation</a></li>
-            <li><a class="dropdown-item" href="/updateAmbulance">Ambulance Details</a></li>
-        </ul>
-      </div>
-
-<a href="/add_vaccine_slot">Vaccine Portal</a>
-
+   
     </body>
 </html>

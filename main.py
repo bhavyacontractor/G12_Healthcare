@@ -45,6 +45,13 @@ def register_page_init():
         hospPassword = hospDetails['hospPassword']
         hospPasswordRepeat = hospDetails['hospPasswordRepeat']
 
+        hospIDStr = str(hosp_ID)
+        digCount = len(hospIDStr)
+        print(digCount)
+
+        if digCount!=5:
+            return render_template('hospital_reg_init.html', error_code=4)
+
         if hospPassword != hospPasswordRepeat:
             error_code = 3
             return render_template('hospital_reg_init.html', error_code=error_code)
