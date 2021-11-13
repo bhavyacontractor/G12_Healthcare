@@ -14,5 +14,7 @@ DROP TABLE `Doctor`;
 DROP TABLE `User`;
 DROP TABLE `Hospital`;
 
+DROP TABLE `Doctor_Reviews`;
+
 
 

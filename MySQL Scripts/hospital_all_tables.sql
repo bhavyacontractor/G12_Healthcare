@@ -138,6 +138,17 @@ CREATE TABLE IF NOT EXISTS vaccine_book (
     FOREIGN KEY (`vaccine_time_id`) REFERENCES vaccine_slots(`vaccine_time_id`),
     FOREIGN KEY (`UserID`) REFERENCES User(`UserID`)
 );
+
+CREATE TABLE IF NOT EXISTS `Doctor_Reviews` (
+  `Time_ID` int,
+  `doc_ID` varchar(100),
+  `User_Name` varchar(100),
+  `Review` VARCHAR(100),
+  `Rating` INT,
+  PRIMARY KEY (`Time_ID`),
+  FOREIGN KEY (`Time_ID`) REFERENCES TimeSlots(`Time_ID`),
+  FOREIGN KEY (`doc_ID`) REFERENCES Doctor(`doc_ID`)
+  );
   
   
   

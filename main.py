@@ -1,5 +1,5 @@
 from re import A
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session , flash
 import flask
 from datetime import datetime, timedelta
 from flask_mysqldb import MySQL
@@ -936,7 +936,7 @@ def appointment_notifications():
 @app.route('/appointment_history', methods=['GET', 'POST'])
 def appointment_history():
     user_type=session['type']
-    
+
     if user_type == 'doctor':
         Doc_ID = session['doc_ID']
         today = (datetime.datetime.today()).strftime("%Y-%m-%d")
@@ -1447,6 +1447,35 @@ def vaccine_notifications():
 
     return render_template('vaccine_notifications.html',d1=d1,d2=d2,UserID=UserID,username=username)
 
+@app.route('/giveRating/<string:doc_ID>/<string:user_name>/<int:Time_ID>',methods=['GET', 'POST'])
+def giveRating(doc_ID,user_name,Time_ID):
+    if request.method == 'POST':
+        review = request.form['review']
+        rating = request.form['rating']
+        
+        try:   
+            cur = myconn.cursor()
+            cur.execute("INSERT INTO Doctor_Reviews (Time_ID,doc_ID,User_Name,Review,Rating) VALUES (%s,%s,%s,%s,%s)",(int(Time_ID),doc_ID,user_name,review,int(rating)))
+            myconn.commit()
+            cur.close()
+        except:
+            flash("You Have already given a review!")
+        return redirect('/appointment_history')
+
+@app.route('/view_reviews/<string:doc_ID>/<string:doc_name>',methods=['GET', 'POST'])
+def viewRatings(doc_ID,doc_name):
+    query = "SELECT * FROM Doctor_Reviews WHERE doc_ID='%s'"%(doc_ID)
+    cur = myconn.cursor()
+    cur.execute(query)
+    reviews = cur.fetchall()
+    cur.close()
+    query = "SELECT AVG(Rating) FROM Doctor_Reviews WHERE doc_ID='%s'" %(doc_ID)
+    cur = myconn.cursor()
+    cur.execute(query)
+    avg_rating = int((cur.fetchall())[0][0])
+    cur.close()
+    print(reviews)
+    return render_template('ratings_and_reviews.html',reviews=reviews,doc_name = doc_name,avg_rating=avg_rating)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
