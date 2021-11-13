@@ -1472,7 +1472,10 @@ def viewRatings(doc_ID,doc_name):
     query = "SELECT AVG(Rating) FROM Doctor_Reviews WHERE doc_ID='%s'" %(doc_ID)
     cur = myconn.cursor()
     cur.execute(query)
-    avg_rating = int((cur.fetchall())[0][0])
+    try:
+        avg_rating = ((cur.fetchall())[0][0])
+    except:
+        avg_rating='Unrated'
     cur.close()
     print(reviews)
     return render_template('ratings_and_reviews.html',reviews=reviews,doc_name = doc_name,avg_rating=avg_rating)
