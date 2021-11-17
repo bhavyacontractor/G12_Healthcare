@@ -1316,8 +1316,8 @@ def book():
         cur = myconn.cursor()
         cur.execute(concurrent_book_query)
         slots = cur.fetchall()
-        left = slots[0][0]
-        if left==0:
+        left_slots = slots[0][0]
+        if left_slots==0:
             return render_template('vaccine_book.html',error=6,hosp_id=hosp_id)
 
         try:
