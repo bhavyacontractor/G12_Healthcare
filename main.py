@@ -1312,6 +1312,14 @@ def book():
         user = session['UserId']
         m=int(hospvaccinedetails[0][6])
 
+        concurrent_book_query = "SELECT total_persons FROM vaccine_slots WHERE vaccine_time_id='%s'" % (time_id)
+        cur = myconn.cursor()
+        cur.execute(concurrent_book_query)
+        slots = cur.fetchall()
+        left = slots[0][0]
+        if left==0:
+            return render_template('vaccine_book.html',error=6,hosp_id=hosp_id)
+
         try:
             query = "INSERT INTO vaccine_book(UserID,vaccine_time_id,hosp_id,dose) VALUES ('%s',%s,%s,%s)" % (
             user, int(hospvaccinedetails[0][0]), int(hospvaccinedetails[0][1]), int(hospvaccinedetails[0][5]))
