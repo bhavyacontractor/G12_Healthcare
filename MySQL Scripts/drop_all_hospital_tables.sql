@@ -8,13 +8,15 @@ DROP TABLE `BloodDetails`;
 
 DROP TABLE `chat`;
 
+DROP TABLE `Doctor_Reviews`;
+
 DROP TABLE `Appointment`;
 DROP TABLE `TimeSlots`;
 DROP TABLE `Doctor`;
 DROP TABLE `User`;
 DROP TABLE `Hospital`;
 
-DROP TABLE `Doctor_Reviews`;
+
 
 
 
