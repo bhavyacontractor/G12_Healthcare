@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/home.css">
     <style>
         a{
             width: 150px;
@@ -12,21 +12,61 @@
     </style>
 </head>
 <body>
-    <!-- <center> -->
         <br>
-        <center><h1 style="color: white;">HealthCare Portal</h1> <br> <br></center>
-        <div class="base">
+        <section><center><h1>HealthCare Portal</h1>
+        <!-- <h3 style="color: white;">Quality HealthCare For Everyone</h3> -->
+        </center></section>
+        <br>
         
-        <!-- <center> -->
+        <p>This is a HealthCare portal by IIT-Indore students which aims to provide quality healthcare to every person of India. We believe in empowering our users with the most accurate, comprehensive, and curated information and care, enabling them to take better healthcare decisions</p>
+
+        <div class="container1">
+            <div class="card">
+                <img src="../static/hospital.jpg" alt="">
+                <span>Hospital Register And Login</span>
+                <!-- <span>Hospital Register And Login</span> -->
+                <center><a href="/hospRegisterInitial"><button type="button" class="btn btn-secondary">Register</button></a></center>
+                <center><a href="/hospLogin"><button type="button" class="btn btn-secondary">Login</button></a></center>
+            </div>
+
+            <div class="card">
+                <img src="../static/user.jpg" id="user" alt="">
+                <span id="user_span">User Login & Register</span>
+                <center><a href="/user"><button type="button" id="user_button" class="btn btn-secondary">User</button></a></center>
+            </div>
+
+            <div class="card">
+                <img src="../static/doctor.jpg" alt="">
+                <span>Doctor Register Login</span>
+                <center><a href="/doctor_reg"><button type="button" class="btn btn-secondary">Register</button></a></center>
+                <center><a href="/doctor_login"><button type="button" class="btn btn-secondary">Login</button></a></center>
+            </div>
+        </div>
+
+        <!-- <div class="container2">
+            <div class="card">
+                <img src="../static/hospital.jpg" alt="">
+                <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, veritatis!</span>
+                <center><button type="button" class="btn btn-secondary">Secondary</button></center>
+            </div>
+
+            <div class="card">
+                <img src="../static/hospital.jpg" alt="">
+                <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, veritatis!</span>
+                <center><button type="button" class="btn btn-secondary">Secondary</button></center>
+            </div>
+        </div> -->
+
+        <!-- <div class="base">
         <div class="flex_box">
             <a href="/hospRegisterInitial" class="logOutBtn">Hospital Register</a> <br> <br>
             <a href="/hospLogin" class="logOutBtn">Hospital Login</a> <br> <br>
             <a href="/doctor_reg" class="logOutBtn">Doctor Registration</a> <br> <br>
             <a href="/doctor_login" class="logOutBtn">Doctor Login</a> <br> <br>
             <a href="/user" class="logOutBtn">User</a> <br> <br>
-        </div>
-    </div>
-    <!-- </center> -->
-    <!-- </center> -->
+        </div> -->
+
+
+
 </body>
 </html>
