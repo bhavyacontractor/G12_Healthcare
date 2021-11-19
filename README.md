@@ -1,4 +1,17 @@
 # HealthCare Portal
+This project is made as a part of course "Database and Information Systems" in Indian Institute of Technology, Indore.
+As in Covid-19 pandemic we have seen that quality HealthCare is one of the basic need of every person so, this project aims to provide quality healthcare to every person.
+It solves the problems which we generally faced during pandemic
+* unable to take appointment with doctors without going hospitals.
+* difficulty in finding Facilities like avialability of oxygen, beds, etc in hospitals.
+* difficulty in finding vaccine slots in nearby hospitals.
+
+Now this project provides solutions to above problems.
+* user can can book appointment and chat with doctors.
+* user can see facilities provided by hospitals without visiting anywhere.
+* user can easily track their appointment requests.
+* doctor and hospitals can manage appointment and vaccine bookings easily.
+
 This project can be used by user or doctor or hospital.
 
 A user can
