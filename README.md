@@ -21,3 +21,13 @@ A doctor can
 * accepts or rejects appointment requests.
 * add post description or refer medicines to user after appointment.
 * chat with users.
+
+# For downloading
+you can clone this project in your local machine and use this project using Visual Studio Code and MySQL Workbench.
+
+Requirements
+* Python (recommended version 3.7.6 and above)
+* pip install -r requirements.txt (Please run your command prompt/terminal as administrator)
+
+you can make your own database using sql codes in MySQL Workbench.
+Now, you can run the python script and open 'localhost:5000' in browser.
