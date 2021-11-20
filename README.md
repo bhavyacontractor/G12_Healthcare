@@ -42,7 +42,7 @@ This project is made by
 * Priyansh Jaseja
 
 # For downloading
-you can clone this project in your local machine and use this project using Visual Studio Code and MySQL Workbench.
+you can clone this project in your local machine.
 
 Requirements
 * Python (recommended version 3.7.6 and above)
