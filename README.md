@@ -1,12 +1,11 @@
 # HealthCare Portal
-This project is made as a part of course "Database and Information Systems" in Indian Institute of Technology, Indore.
 As in Covid-19 pandemic we have seen that quality HealthCare is one of the basic need of every person so, this project aims to provide quality healthcare to every person.
-It solves the problems which we generally faced during pandemic
+It solves the problems which we generally faced during pandemic like
 * unable to take appointment with doctors without going hospitals.
 * difficulty in finding Facilities like avialability of oxygen, beds, etc in hospitals.
 * difficulty in finding vaccine slots in nearby hospitals.
 
-Now this project provides solutions to above problems.
+Now this project provides solutions to above problems as
 * user can can book appointment and chat with doctors.
 * user can see facilities provided by hospitals without visiting anywhere.
 * user can easily track their appointment requests.
@@ -35,6 +34,13 @@ A doctor can
 * add post description or refer medicines to user after appointment.
 * chat with users.
 
+This project is made as a part of course "Database and Information Systems" in Indian Institute of Technology, Indore.
+This project is made by
+* Amit Kumar Makkad
+* Bhavya Contractor
+* Mihir Karandikar
+* Priyansh Jaseja
+
 # For downloading
 you can clone this project in your local machine and use this project using Visual Studio Code and MySQL Workbench.
 
@@ -43,4 +49,4 @@ Requirements
 * pip install -r requirements.txt (Please run your command prompt/terminal as administrator)
 
 you can make your own database using sql codes in MySQL Workbench.
-Now, you can run the python script and open 'localhost:5000' in browser.
+Now, you can run the python script and open 'localhost:8000' in browser.
