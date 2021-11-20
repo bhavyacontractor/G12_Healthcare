@@ -1345,7 +1345,7 @@ def search_doctors(speciality):
     session['srch_doc_speciality'] = speciality
     session["preDesc"]="None"
 
-    specialities = ['Physician', 'Dentist', 'Obstetrician', 'Opthalmologist', 'Cardiologist', 'Psychiatrist',
+    specialities = ['Physician', 'Dentist', 'Obstetrician', 'Opthalmologist', 'ENT','Cardiologist', 'Psychiatrist',
                     'Homeopath', 'Ayurveda']
 
     if session['srch_doc_speciality'] == 'none':
