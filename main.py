@@ -19,12 +19,7 @@ Session(app)
 
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-# myconn = mysql.connector.connect(host="localhost", user="root", passwd="@Bhakauhet92", database="healthcare",
-#                                  buffered=True)
-
-# myconn = mysql.connector.connect(host="localhost", user="root", passwd="amit@186", database="healthcare_portal", buffered=True)
-
-myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "200001044mysql",database="healthcare_portal", auth_plugin="200001044mysql",buffered=True)
+myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "",database="cs207_healthcare_management", auth_plugin="",buffered=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
@@ -603,8 +598,12 @@ def doctor_login():
 
 @app.route('/doctor_after_login', methods=['GET', 'POST'])
 def doctor_after_login():
+    doc_ID = session["doc_ID"]
+    cur = myconn.cursor()
+    cur.execute("SELECT * FROM doctor WHERE doc_ID ='%s'" % (doc_ID))
+    docAllDetails = cur.fetchall()
     return render_template('doctor_after_login.html', docName=session["docName"],
-                           docAllDetails='')
+                           docAllDetails=docAllDetails)
 
 
 @app.route('/update_doctors', methods=['GET', 'POST'])
